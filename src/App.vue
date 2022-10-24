@@ -1,41 +1,59 @@
 <template>
     <div class="w-full min-h-screen px-1vw reset" :class="[theme]">
         <NavBar />
+
         <router-view v-slot="{ Component }">
             <keep-alive :max="5">
                 <component :is="Component" :key="$route.fullPath" />
             </keep-alive>
         </router-view>
 
-        <footer class="text-center my-2">
-            <a aria-label="GitHub" href="https://github.com/TeamPiped/Piped">
-                <font-awesome-icon :icon="['fab', 'github']" />
-            </a>
-            <a class="ml-2" href="https://github.com/TeamPiped/Piped#donations">
-                <font-awesome-icon :icon="['fab', 'bitcoin']" />
-                <span class="ml-1" v-t="'actions.donations'" />
-            </a>
-        </footer>
+        <FooterComponent />
     </div>
 </template>
 
 <script>
 import NavBar from "./components/NavBar.vue";
+import FooterComponent from "./components/FooterComponent.vue";
+
+const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
+
 export default {
     components: {
         NavBar,
+        FooterComponent,
+    },
+    data() {
+        return {
+            theme: "dark",
+        };
+    },
+    methods: {
+        setTheme() {
+            let themePref = this.getPreferenceString("theme", "dark");
+            if (themePref == "auto") this.theme = darkModePreference.matches ? "dark" : "light";
+            else this.theme = themePref;
+        },
     },
     mounted() {
+        this.setTheme();
+        darkModePreference.addEventListener("change", () => {
+            this.setTheme();
+        });
         if (this.getPreferenceBoolean("watchHistory", false))
             if ("indexedDB" in window) {
-                const request = indexedDB.open("piped-db", 1);
-                request.onupgradeneeded = function () {
+                const request = indexedDB.open("piped-db", 2);
+                request.onupgradeneeded = ev => {
                     const db = request.result;
                     console.log("Upgrading object store.");
                     if (!db.objectStoreNames.contains("watch_history")) {
                         const store = db.createObjectStore("watch_history", { keyPath: "videoId" });
                         store.createIndex("video_id_idx", "videoId", { unique: true });
                         store.createIndex("id_idx", "id", { unique: true, autoIncrement: true });
+                    }
+                    if (ev.oldVersion < 2) {
+                        const store = request.transaction.objectStore("watch_history");
+                        store.createIndex("watchedAt", "watchedAt", { unique: false });
                     }
                 };
                 request.onsuccess = e => {
@@ -49,9 +67,9 @@ export default {
             const defaultLang = await App.defaultLangage;
             const locale = App.getPreferenceString("hl", defaultLang);
             if (locale !== App.TimeAgoConfig.locale) {
-                const localeTime = await import(
-                    "./../node_modules/javascript-time-ago/locale/" + locale + ".json"
-                ).then(module => module.default);
+                const localeTime = await import(`../node_modules/javascript-time-ago/locale/${locale}.json`).then(
+                    module => module.default,
+                );
                 App.TimeAgo.addLocale(localeTime);
                 App.TimeAgoConfig.locale = locale;
             }
@@ -106,15 +124,11 @@ b {
 }
 
 .btn {
-    @apply h-full py-2 lt-md:px-2 md:px-4 rounded cursor-pointer;
+    @apply py-2 lt-md:px-2 md:px-4 rounded cursor-pointer inline-block;
 }
 
 .reset {
     @apply text-black bg-white;
-}
-
-.auto {
-    @apply @dark:(text-white bg-dark-900);
 }
 
 .dark {
@@ -142,12 +156,6 @@ b {
     @apply text-gray-400 bg-dark-400;
 }
 
-.auto .input,
-.auto .select,
-.auto .btn {
-    @apply @dark:(text-gray-400 bg-dark-400);
-}
-
 .input {
     @apply pl-2.5;
 }
@@ -163,10 +171,6 @@ hr {
 
 .dark hr {
     @apply border-dark-100;
-}
-
-.auto hr {
-    @apply @dark:border-dark-100;
 }
 
 h1,
@@ -198,16 +202,8 @@ h2 {
     @apply hover:(text-gray-300 underline underline-gray-300);
 }
 
-.auto .link {
-    @apply @dark:hover:(text-gray-300 underline underline-gray-300);
-}
-
 .dark .link-secondary {
     @apply text-gray-300 hover:(text-gray-400 underline underline-gray-400);
-}
-
-.auto .link-secondary {
-    @apply @dark:(text-gray-300 hover:(text-gray-400 underline underline-gray-400));
 }
 
 .line {
@@ -216,5 +212,16 @@ h2 {
 
 .dark .line {
     @apply bg-white;
+}
+
+.thumbnail-overlay {
+    @apply rounded-md absolute bg-black text-white bg-opacity-75 px-5px;
+}
+
+.thumbnail-right {
+    @apply bottom-5px right-5px;
+}
+.thumbnail-left {
+    @apply bottom-5px left-5px text-xs font-bold bg-red-600 uppercase;
 }
 </style>

@@ -47,11 +47,16 @@ export default {
             }
         },
         async refreshSuggestions() {
-            this.searchSuggestions = (
-                await this.fetchJson(this.apiUrl() + "/opensearch/suggestions", {
-                    query: this.searchText,
-                })
-            )?.[1];
+            if (!this.searchText) {
+                if (this.getPreferenceBoolean("searchHistory", false))
+                    this.searchSuggestions = JSON.parse(localStorage.getItem("search_history")) ?? [];
+            } else {
+                this.searchSuggestions = (
+                    await this.fetchJson(this.apiUrl() + "/opensearch/suggestions", {
+                        query: this.searchText,
+                    })
+                )?.[1];
+            }
             this.searchSuggestions.unshift(this.searchText);
             this.setSelected(0);
         },
@@ -84,20 +89,12 @@ export default {
     @apply bg-dark-400;
 }
 
-.auto .suggestions-container {
-    @apply @dark:bg-dark-400;
-}
-
 .suggestion-selected {
     @apply bg-gray-200;
 }
 
 .dark .suggestion-selected {
     @apply bg-dark-100;
-}
-
-.auto .suggestion-selected {
-    @apply @dark:bg-dark-100;
 }
 
 .suggestion {

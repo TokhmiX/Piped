@@ -48,7 +48,7 @@
         "export_to_json": "Exportovat do JSON",
         "import_from_json": "Importovat z JSON/CSV",
         "auto_play_next_video": "Automaticky přehrát další video",
-        "donations": "Darovat",
+        "donations": "Dary na vývoj",
         "show_description": "Zobrazit popis",
         "minimize_recommendations": "Skrýt doporučení",
         "skip_outro": "Přeskočit koncové karty / titulky",
@@ -61,7 +61,6 @@
         "filter": "Filtr",
         "loading": "Načítání...",
         "clear_history": "Smazat historii",
-        "show_replies": "Zobrazit odpovědi",
         "hide_replies": "Skrýt odpovědi",
         "load_more_replies": "Načíst další odpovědi",
         "unsubscribe": "Zrušit odběr - {count}",
@@ -94,13 +93,29 @@
         "restore_preferences": "Obnovit předvolby",
         "backup_preferences": "Zálohovat předvolby",
         "confirm_reset_preferences": "Opravdu chcete resetovat své předvolby?",
-        "back_to_home": "Zpátky domů"
+        "back_to_home": "Zpátky domů",
+        "share": "Sdílet",
+        "with_timecode": "Sdílet s časovým kódem",
+        "piped_link": "Odkaz na Piped",
+        "follow_link": "Otevřít odkaz",
+        "copy_link": "Kopírovat odkaz",
+        "time_code": "Časový kód (v sekundách)",
+        "rename_playlist": "Přejmenovat playlist",
+        "new_playlist_name": "Nový název playlistu",
+        "show_chapters": "Kapitoly",
+        "store_search_history": "Ukládat historii vyhledávání",
+        "hide_watched": "Skrýt sledovaná videa v kanálu",
+        "source_code": "Zdrojový kód",
+        "instance_donations": "Dary na instanci",
+        "documentation": "Dokumentace",
+        "status_page": "Stav",
+        "reply_count": "{count} odpovědí"
     },
     "player": {
         "watch_on": "Sledovat na {0}"
     },
     "comment": {
-        "pinned_by": "Připnuto uživatelem",
+        "pinned_by": "Připnuto uživatelem {author}",
         "loading": "Načítání komentářů...",
         "disabled": "Komentáře jsou zakázány autorem videa.",
         "user_disabled": "Komentáře jsou zakázány v nastavení."
@@ -147,6 +162,8 @@
     },
     "info": {
         "preferences_note": "Poznámka: předvolby se ukládají do místního úložiště prohlížeče. Vymazáním dat prohlížeče budou obnoveny.",
-        "page_not_found": "Stránka nenalezena"
+        "page_not_found": "Stránka nenalezena",
+        "copied": "Zkopírováno!",
+        "cannot_copy": "Nelze zkopírovat!"
     }
 }

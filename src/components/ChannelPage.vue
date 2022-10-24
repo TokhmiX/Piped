@@ -22,6 +22,19 @@
             }"
         ></button>
 
+        <!-- RSS Feed button -->
+        <a
+            aria-label="RSS feed"
+            title="RSS feed"
+            role="button"
+            v-if="channel.id"
+            :href="`${apiUrl()}/feed/unauthenticated/rss?channels=${channel.id}`"
+            target="_blank"
+            class="btn flex-col ml-3"
+        >
+            <font-awesome-icon icon="rss" />
+        </a>
+
         <hr />
 
         <div class="video-grid">

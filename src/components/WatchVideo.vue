@@ -29,7 +29,7 @@
                 />
                 <ChaptersBar
                     :mobileLayout="isMobile"
-                    v-if="video?.chapters?.length > 0"
+                    v-if="video?.chapters?.length > 0 && showChapters"
                     :chapters="video.chapters"
                     :player-position="currentTime"
                     @seek="navigate"
@@ -47,11 +47,11 @@
                 <!-- Likes/dilikes -->
                 <div class="flex children:mr-2">
                     <template v-if="video.likes >= 0">
-                        <div class="flex">
+                        <div class="flex items-center">
                             <div class="i-fa-solid:thumbs-up" />
                             <strong class="ml-1" v-text="addCommas(video.likes)" />
                         </div>
-                        <div class="flex">
+                        <div class="flex items-center">
                             <div class="i-fa-solid:thumbs-down" />
                             <strong class="ml-1" v-text="video.dislikes >= 0 ? addCommas(video.dislikes) : '?'" />
                         </div>
@@ -74,7 +74,7 @@
                     <!-- Verified Badge -->
                     <font-awesome-icon class="ml-1" v-if="video.uploaderVerified" icon="check" />
                 </div>
-                <div class="flex relative ml-auto children:mx-1">
+                <div class="flex relative ml-auto children:mx-1 items-center">
                     <button class="btn" v-if="authenticated" @click="showModal = !showModal">
                         {{ $t("actions.add_to_playlist") }}<font-awesome-icon class="ml-1" icon="circle-plus" />
                     </button>
@@ -102,9 +102,7 @@
                             title="RSS feed"
                             role="button"
                             v-if="video.uploaderUrl"
-                            :href="`https://www.youtube.com/feeds/videos.xml?channel_id=${
-                                video.uploaderUrl.split('/')[2]
-                            }`"
+                            :href="`${apiUrl()}/feed/unauthenticated/rss?channels=${video.uploaderUrl.split('/')[2]}`"
                             target="_blank"
                             class="btn flex-col"
                         >
@@ -139,6 +137,12 @@
                 @click="showDesc = !showDesc"
                 v-t="`actions.${showDesc ? 'minimize_description' : 'show_description'}`"
             />
+
+            <span class="btn" v-show="video?.chapters?.length > 0">
+                <input id="showChapters" type="checkbox" v-model="showChapters" />
+                <label class="ml-2" for="showChapters" v-t="'actions.show_chapters'" />
+            </span>
+
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-show="showDesc" class="break-words" v-html="purifyHTML(video.description)" />
             <div
@@ -158,9 +162,14 @@
         <hr />
 
         <div class="grid xl:grid-cols-5 sm:grid-cols-4 grid-cols-1">
-            <div v-if="!commentsEnabled" class="xl:col-span-4 sm:col-span-3">
-                <p class="text-center mt-8" v-t="'comment.user_disabled'"></p>
+            <div class="xl:col-span-4 sm:col-span-3">
+                <button
+                    class="btn mb-2"
+                    @click="toggleComments"
+                    v-t="`actions.${showComments ? 'minimize_comments' : 'show_comments'}`"
+                />
             </div>
+            <div v-if="!showComments" class="xl:col-span-4 sm:col-span-3"></div>
             <div v-else-if="!comments" class="xl:col-span-4 sm:col-span-3">
                 <p class="text-center mt-8" v-t="'comment.loading'"></p>
             </div>
@@ -239,8 +248,10 @@ export default {
             sponsors: null,
             selectedAutoLoop: false,
             selectedAutoPlay: null,
+            showComments: true,
             showDesc: true,
             showRecs: true,
+            showChapters: true,
             comments: null,
             subscribed: false,
             channelId: null,
@@ -271,9 +282,6 @@ export default {
                 day: "numeric",
                 year: "numeric",
             });
-        },
-        commentsEnabled() {
-            return this.getPreferenceBoolean("comments", true);
         },
     },
     mounted() {
@@ -322,7 +330,7 @@ export default {
         this.index = Number(this.$route.query.index);
         this.getPlaylistData();
         this.getSponsors();
-        if (!this.isEmbed && this.commentsEnabled) this.getComments();
+        if (!this.isEmbed && this.showComments) this.getComments();
         window.addEventListener("resize", () => {
             this.smallView = this.smallViewQuery.matches;
         });
@@ -330,6 +338,7 @@ export default {
     activated() {
         this.active = true;
         this.selectedAutoPlay = this.getPreferenceBoolean("autoplay", false);
+        this.showComments = !this.getPreferenceBoolean("minimizeComments", false);
         this.showDesc = !this.getPreferenceBoolean("minimizeDescription", false);
         this.showRecs = !this.getPreferenceBoolean("minimizeRecommendations", false);
         if (this.video.duration) {
@@ -359,6 +368,12 @@ export default {
                     ) +
                     '"]',
             });
+        },
+        toggleComments() {
+            this.showComments = !this.showComments;
+            if (this.showComments && this.comments === null) {
+                this.fetchComments();
+            }
         },
         fetchComments() {
             return this.fetchJson(this.apiUrl() + "/comments/" + this.getVideoId());
@@ -472,7 +487,7 @@ export default {
         },
         handleScroll() {
             if (this.loading || !this.comments || !this.comments.nextpage) return;
-            if (window.innerHeight + window.scrollY >= this.$refs.comments.offsetHeight - window.innerHeight) {
+            if (window.innerHeight + window.scrollY >= this.$refs.comments?.offsetHeight - window.innerHeight) {
                 this.loading = true;
                 this.fetchJson(this.apiUrl() + "/nextpage/comments/" + this.getVideoId(), {
                     nextpage: this.comments.nextpage,

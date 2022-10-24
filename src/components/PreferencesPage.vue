@@ -66,11 +66,11 @@
             @change="onChange($event)"
         />
     </label>
-    <label class="pref" for="chkShowComments">
-        <strong v-t="'actions.show_comments'" />
+    <label class="pref" for="chkMinimizeComments">
+        <strong v-t="'actions.minimize_comments_default'" />
         <input
-            id="chkShowComments"
-            v-model="showComments"
+            id="chkMinimizeComments"
+            v-model="minimizeComments"
             class="checkbox"
             type="checkbox"
             @change="onChange($event)"
@@ -96,6 +96,16 @@
             @change="onChange($event)"
         />
     </label>
+    <label class="pref" for="chkStoreSearchHistory">
+        <strong v-t="'actions.store_search_history'" />
+        <input
+            id="chkStoreSearchHistory"
+            v-model="searchHistory"
+            class="checkbox"
+            type="checkbox"
+            @change="onChange($event)"
+        />
+    </label>
     <label class="pref" for="chkStoreWatchHistory">
         <strong v-t="'actions.store_watch_history'" />
         <input
@@ -105,6 +115,10 @@
             type="checkbox"
             @change="onChange($event)"
         />
+    </label>
+    <label v-if="watchHistory" class="pref" for="chkHideWatched">
+        <strong v-t="'actions.hide_watched'" />
+        <input id="chkHideWatched" v-model="hideWatched" class="checkbox" type="checkbox" @change="onChange($event)" />
     </label>
     <label class="pref" for="ddlEnabledCodecs">
         <strong v-t="'actions.enabled_codecs'" />
@@ -351,10 +365,12 @@ export default {
             countryMap: CountryMap,
             countrySelected: "US",
             defaultHomepage: "trending",
-            showComments: true,
+            minimizeComments: false,
             minimizeDescription: false,
             minimizeRecommendations: false,
             watchHistory: false,
+            searchHistory: false,
+            hideWatched: false,
             selectedLanguage: "en",
             languages: [
                 { code: "ar", name: "Arabic" },
@@ -373,6 +389,7 @@ export default {
                 { code: "fa", name: "فارسی" },
                 { code: "fi", name: "Suomi" },
                 { code: "fr", name: "Français" },
+                { code: "he", name: "עברית" },
                 { code: "hi", name: "हिंदी" },
                 { code: "id", name: "Indonesia" },
                 { code: "is", name: "Íslenska" },
@@ -484,14 +501,16 @@ export default {
             this.bufferingGoal = Math.max(Number(localStorage.getItem("bufferGoal")), 10);
             this.countrySelected = this.getPreferenceString("region", "US");
             this.defaultHomepage = this.getPreferenceString("homepage", "trending");
-            this.showComments = this.getPreferenceBoolean("comments", true);
+            this.minimizeComments = this.getPreferenceBoolean("minimizeComments", false);
             this.minimizeDescription = this.getPreferenceBoolean("minimizeDescription", false);
             this.minimizeRecommendations = this.getPreferenceBoolean("minimizeRecommendations", false);
             this.watchHistory = this.getPreferenceBoolean("watchHistory", false);
+            this.searchHistory = this.getPreferenceBoolean("searchHistory", false);
             this.selectedLanguage = this.getPreferenceString("hl", await this.defaultLangage);
             this.enabledCodecs = this.getPreferenceString("enabledCodecs", "vp9,avc").split(",");
             this.disableLBRY = this.getPreferenceBoolean("disableLBRY", false);
             this.proxyLBRY = this.getPreferenceBoolean("proxyLBRY", false);
+            this.hideWatched = this.getPreferenceBoolean("hideWatched", false);
             if (this.selectedLanguage != "en") {
                 try {
                     this.CountryMap = await import(`../utils/CountryMaps/${this.selectedLanguage}.json`).then(
@@ -541,14 +560,17 @@ export default {
                 localStorage.setItem("bufferGoal", this.bufferingGoal);
                 localStorage.setItem("region", this.countrySelected);
                 localStorage.setItem("homepage", this.defaultHomepage);
-                localStorage.setItem("comments", this.showComments);
+                localStorage.setItem("minimizeComments", this.minimizeComments);
                 localStorage.setItem("minimizeDescription", this.minimizeDescription);
                 localStorage.setItem("minimizeRecommendations", this.minimizeRecommendations);
                 localStorage.setItem("watchHistory", this.watchHistory);
+                localStorage.setItem("searchHistory", this.searchHistory);
+                if (!this.searchHistory) localStorage.removeItem("search_history");
                 localStorage.setItem("hl", this.selectedLanguage);
                 localStorage.setItem("enabledCodecs", this.enabledCodecs.join(","));
                 localStorage.setItem("disableLBRY", this.disableLBRY);
                 localStorage.setItem("proxyLBRY", this.proxyLBRY);
+                localStorage.setItem("hideWatched", this.hideWatched);
 
                 if (shouldReload) window.location.reload();
             }

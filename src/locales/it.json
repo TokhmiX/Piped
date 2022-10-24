@@ -40,7 +40,7 @@
         "minimize_description": "Minimizza la descrizione per impostazione predefinita",
         "minimize_recommendations": "Minimizza consigli",
         "show_recommendations": "Mostra consigli",
-        "donations": "Donazioni",
+        "donations": "Donazioni per lo sviluppo",
         "auto_play_next_video": "Riproduci automaticamente il prossimo video",
         "loop_this_video": "Ripeti questo video",
         "import_from_json": "Importa da JSON/CSV",
@@ -54,7 +54,6 @@
         "search": "Cerca",
         "view_ssl_score": "Visualizza il punteggio SSL",
         "clear_history": "Cancella la cronologia",
-        "show_replies": "Mostra risposte",
         "load_more_replies": "Carica più risposte",
         "hide_replies": "Nascondi risposte",
         "skip_filler_tangent": "Ignora i filler",
@@ -81,7 +80,21 @@
         "restore_preferences": "Ripristina le preferenze",
         "reset_preferences": "Reimposta le preferenze",
         "backup_preferences": "Salva un backup delle preferenze",
-        "back_to_home": "Torna alla pagina iniziale"
+        "back_to_home": "Torna alla pagina iniziale",
+        "share": "Condividi",
+        "piped_link": "Collegamento a Piped",
+        "copy_link": "Copia il collegamento",
+        "time_code": "Tempo (in secondi)",
+        "follow_link": "Apri il collegamento",
+        "with_timecode": "Condividi con marca temporale",
+        "new_playlist_name": "Nuovo nome dalla playlist",
+        "rename_playlist": "Rinomina la playlist",
+        "show_chapters": "Capitoli",
+        "store_search_history": "Memorizza la cronologia delle ricerche",
+        "status_page": "Stato",
+        "documentation": "Documentazione",
+        "source_code": "Codice sorgente",
+        "reply_count": "{count} risposte"
     },
     "player": {
         "watch_on": "Guarda su {0}"
@@ -107,7 +120,7 @@
         "ratings_disabled": "Valutazioni disabilitate",
         "live": "{0} Diretta",
         "chapters": "Capitoli",
-        "shorts": "Shorts"
+        "shorts": "Short"
     },
     "preferences": {
         "ssl_score": "Valutazione SSL",
@@ -119,7 +132,7 @@
         "up_to_date": "Aggiornato?"
     },
     "comment": {
-        "pinned_by": "Appuntato da",
+        "pinned_by": "Appuntato da {author}",
         "disabled": "I commenti sono disabilitati dall'autore.",
         "loading": "Caricamento dei commenti…",
         "user_disabled": "I commenti sono disabilitati nelle impostazioni."
@@ -147,6 +160,8 @@
     },
     "info": {
         "page_not_found": "Pagina non trovata",
-        "preferences_note": "Nota: le preferenze sono salvate nella memoria locale del tuo browser. L'eliminazione dei dati del tuo browser le ripristinerà."
+        "preferences_note": "Nota: le preferenze sono salvate nella memoria locale del tuo browser. L'eliminazione dei dati del tuo browser le ripristinerà.",
+        "copied": "Copiato!",
+        "cannot_copy": "Impossibile copiare!"
     }
 }
