@@ -10,7 +10,9 @@
         "playlists": "Playlists",
         "account": "Account",
         "instance": "Instance",
-        "player": "Player"
+        "player": "Player",
+        "livestreams": "Livestreams",
+        "channels": "Channels"
     },
     "player": {
         "watch_on": "Watch on {0}"
@@ -88,6 +90,8 @@
         "delete_account": "Delete Account",
         "logout": "Logout from this device",
         "minimize_recommendations_default": "Minimize Recommendations by default",
+        "minimize_chapters_default": "Minimize Chapters by default",
+        "show_watch_on_youtube": "Show Watch on YouTube button",
         "invalidate_session": "Logout all devices",
         "different_auth_instance": "Use a different instance for authentication",
         "instance_auth_selection": "Autentication Instance Selection",

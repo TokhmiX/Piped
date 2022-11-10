@@ -21,7 +21,7 @@ import {
     faServer,
     faDonate,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGithub, faBitcoin } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faBitcoin, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(
     faEye,
@@ -31,6 +31,7 @@ library.add(
     faCheck,
     faHeart,
     faHeadphones,
+    faYoutube,
     faRss,
     faChevronLeft,
     faLevelDownAlt,
@@ -88,7 +89,17 @@ const mixin = {
             return str;
         },
         numberFormat(num) {
-            const formatter = Intl.NumberFormat(undefined, { notation: "compact" });
+            var loc = `${this.getPreferenceString("hl")}-${this.getPreferenceString("region")}`;
+
+            try {
+                Intl.getCanonicalLocales(loc);
+            } catch {
+                loc = undefined;
+            }
+
+            const formatter = Intl.NumberFormat(loc, {
+                notation: "compact",
+            });
             return formatter.format(num);
         },
         addCommas(num) {
@@ -237,7 +248,7 @@ const mixin = {
                 return false;
             }
         },
-        async defaultLangage() {
+        async defaultLanguage() {
             const languages = window.navigator.languages;
             for (let i = 0; i < languages.length; i++) {
                 try {

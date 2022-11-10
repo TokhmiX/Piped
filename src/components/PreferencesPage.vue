@@ -96,6 +96,26 @@
             @change="onChange($event)"
         />
     </label>
+    <label class="pref" for="chkMinimizeChapters">
+        <strong v-t="'actions.minimize_chapters_default'" />
+        <input
+            id="chkMinimizeChapters"
+            v-model="minimizeChapters"
+            class="checkbox"
+            type="checkbox"
+            @change="onChange($event)"
+        />
+    </label>
+    <label class="pref" for="chkShowWatchOnYouTube">
+        <strong v-t="'actions.show_watch_on_youtube'" />
+        <input
+            id="chkShowWatchOnYouTube"
+            v-model="showWatchOnYouTube"
+            class="checkbox"
+            type="checkbox"
+            @change="onChange($event)"
+        />
+    </label>
     <label class="pref" for="chkStoreSearchHistory">
         <strong v-t="'actions.store_search_history'" />
         <input
@@ -368,6 +388,8 @@ export default {
             minimizeComments: false,
             minimizeDescription: false,
             minimizeRecommendations: false,
+            minimizeChapters: false,
+            showWatchOnYouTube: false,
             watchHistory: false,
             searchHistory: false,
             hideWatched: false,
@@ -401,6 +423,7 @@ export default {
                 { code: "ml", name: "മലയാളം" },
                 { code: "nb_NO", name: "Norwegian Bokmål" },
                 { code: "nl", name: "Nederlands" },
+                { code: "or", name: "ଓଡ଼ିଆ" },
                 { code: "pl", name: "Polski" },
                 { code: "pt", name: "Português" },
                 { code: "pt_PT", name: "Português (Portugal)" },
@@ -504,9 +527,11 @@ export default {
             this.minimizeComments = this.getPreferenceBoolean("minimizeComments", false);
             this.minimizeDescription = this.getPreferenceBoolean("minimizeDescription", false);
             this.minimizeRecommendations = this.getPreferenceBoolean("minimizeRecommendations", false);
+            this.minimizeChapters = this.getPreferenceBoolean("minimizeChapters", false);
+            this.showWatchOnYouTube = this.getPreferenceBoolean("showWatchOnYouTube", false);
             this.watchHistory = this.getPreferenceBoolean("watchHistory", false);
             this.searchHistory = this.getPreferenceBoolean("searchHistory", false);
-            this.selectedLanguage = this.getPreferenceString("hl", await this.defaultLangage);
+            this.selectedLanguage = this.getPreferenceString("hl", await this.defaultLanguage);
             this.enabledCodecs = this.getPreferenceString("enabledCodecs", "vp9,avc").split(",");
             this.disableLBRY = this.getPreferenceBoolean("disableLBRY", false);
             this.proxyLBRY = this.getPreferenceBoolean("proxyLBRY", false);
@@ -530,8 +555,8 @@ export default {
                 if (
                     this.getPreferenceString("theme", "dark") !== this.selectedTheme ||
                     this.getPreferenceBoolean("watchHistory", false) != this.watchHistory ||
-                    this.getPreferenceString("hl", await this.defaultLangage) !== this.selectedLanguage ||
-                    this.getPreferenceString("enabledCodecs", "av1,vp9,avc") !== this.enabledCodecs.join(",")
+                    this.getPreferenceString("hl", await this.defaultLanguage) !== this.selectedLanguage ||
+                    this.getPreferenceString("enabledCodecs", "vp9,avc") !== this.enabledCodecs.join(",")
                 )
                     shouldReload = true;
 
@@ -563,6 +588,8 @@ export default {
                 localStorage.setItem("minimizeComments", this.minimizeComments);
                 localStorage.setItem("minimizeDescription", this.minimizeDescription);
                 localStorage.setItem("minimizeRecommendations", this.minimizeRecommendations);
+                localStorage.setItem("minimizeChapters", this.minimizeChapters);
+                localStorage.setItem("showWatchOnYouTube", this.showWatchOnYouTube);
                 localStorage.setItem("watchHistory", this.watchHistory);
                 localStorage.setItem("searchHistory", this.searchHistory);
                 if (!this.searchHistory) localStorage.removeItem("search_history");
