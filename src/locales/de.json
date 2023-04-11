@@ -101,7 +101,15 @@
         "minimize_comments_default": "Kommentare automatisch minimieren",
         "minimize_comments": "Kommentare minimieren",
         "no_valid_playlists": "Die Datei enthält keine gültigen Wiedergabelisten!",
-        "show_watch_on_youtube": "Schaltfläche „Auf YouTube ansehen“ anzeigen"
+        "show_watch_on_youtube": "Schaltfläche „Auf YouTube ansehen“ anzeigen",
+        "with_playlist": "Mit Wiedergabeliste teilen",
+        "playlist_bookmarked": "Markiert",
+        "bookmark_playlist": "Lesezeichen",
+        "skip_segment": "Segment überspringen",
+        "skip_automatically": "Automatisch",
+        "min_segment_length": "Minimale Segmentlänge (in Sekunden)",
+        "skip_button_only": "Überspringen-Schaltfläche anzeigen",
+        "show_less": "Weniger anzeigen"
     },
     "player": {
         "watch_on": "Auf {0} ansehen"
@@ -119,7 +127,8 @@
         "player": "Player",
         "instance": "Instanz",
         "livestreams": "Livestreams",
-        "channels": "Kanäle"
+        "channels": "Kanäle",
+        "bookmarks": "Lesezeichen"
     },
     "video": {
         "sponsor_segments": "Sponsoren-Segmente",
@@ -129,7 +138,9 @@
         "ratings_disabled": "Bewertungen deaktiviert",
         "live": "{0} Live",
         "chapters": "Kapitel",
-        "shorts": "Shorts"
+        "shorts": "Shorts",
+        "all": "Alle",
+        "category": "Kategorie"
     },
     "preferences": {
         "ssl_score": "SSL-Bewertung",
@@ -169,6 +180,7 @@
         "page_not_found": "Seite nicht gefunden",
         "copied": "Kopiert!",
         "cannot_copy": "Kopieren nicht möglich!",
-        "local_storage": "Diese Aktion erfordert „localStorage“, sind Cookies aktiviert?"
+        "local_storage": "Diese Aktion erfordert „localStorage“, sind Cookies aktiviert?",
+        "register_no_email_note": "Es wird nicht empfohlen, eine E-Mail als Benutzernamen zu verwenden. Trotzdem weitermachen?"
     }
 }

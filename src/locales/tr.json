@@ -45,7 +45,7 @@
         "export_to_json": "JSON Olarak Dışa Aktar",
         "no": "Hayır",
         "yes": "Evet",
-        "show_more": "Daha Fazla Göster",
+        "show_more": "Daha fazla göster",
         "instance_selection": "Örnek Seçimi",
         "loading": "Yükleniyor...",
         "filter": "Filtrele",
@@ -101,7 +101,15 @@
         "minimize_comments_default": "Yorumları Öntanımlı Olarak Küçült",
         "show_watch_on_youtube": "YouTube'da İzle Düğmesini Göster",
         "minimize_chapters_default": "Bölümleri Öntanımlı Olarak Küçült",
-        "no_valid_playlists": "Dosya geçerli oynatma listeleri içermiyor!"
+        "no_valid_playlists": "Dosya geçerli oynatma listeleri içermiyor!",
+        "with_playlist": "Oynatma listesiyle paylaş",
+        "bookmark_playlist": "Yer imlerine ekle",
+        "playlist_bookmarked": "Yer imlerine eklendi",
+        "min_segment_length": "En Küçük Bölüm Uzunluğu (saniye cinsinden)",
+        "skip_segment": "Bölümü Atla",
+        "skip_button_only": "Atla düğmesini göster",
+        "skip_automatically": "Otomatik olarak",
+        "show_less": "Daha az göster"
     },
     "player": {
         "watch_on": "{0} Üzerinde İzle"
@@ -119,7 +127,8 @@
         "instance": "Örnek",
         "player": "Oynatıcı",
         "livestreams": "Canlı Yayınlar",
-        "channels": "Kanallar"
+        "channels": "Kanallar",
+        "bookmarks": "Yer İmleri"
     },
     "video": {
         "sponsor_segments": "Sponsorlar Bölümleri",
@@ -129,7 +138,9 @@
         "ratings_disabled": "Derecelendirmeler Devre Dışı",
         "chapters": "Bölümler",
         "live": "{0} Canlı",
-        "shorts": "Kısa çekimler"
+        "shorts": "Kısa çekimler",
+        "all": "Tümü",
+        "category": "Kategori"
     },
     "preferences": {
         "ssl_score": "SSL Puanı",
@@ -172,6 +183,7 @@
         "page_not_found": "Sayfa Bulunamadı",
         "copied": "Kopyalandı!",
         "cannot_copy": "Kopyalanamıyor!",
-        "local_storage": "Bu eylem yerel depolama gerektirir, çerezler etkin mi?"
+        "local_storage": "Bu eylem yerel depolama gerektirir, çerezler etkin mi?",
+        "register_no_email_note": "Kullanıcı adı olarak e-posta kullanılması tavsiye edilmez. Yine de devam edilsin mi?"
     }
 }

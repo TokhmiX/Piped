@@ -20,6 +20,7 @@ import {
     faBook,
     faServer,
     faDonate,
+    faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faBitcoin, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -46,6 +47,7 @@ library.add(
     faBook,
     faServer,
     faDonate,
+    faBookmark,
 );
 
 import router from "@/router/router.js";
@@ -157,7 +159,17 @@ const mixin = {
                 (value = new URLSearchParams(window.location.search).get(key)) !== null ||
                 (this.testLocalStorage && (value = localStorage.getItem(key)) !== null)
             ) {
-                return Number(value);
+                const num = Number(value);
+                return isNaN(num) ? defaultVal : num;
+            } else return defaultVal;
+        },
+        getPreferenceJSON(key, defaultVal) {
+            var value;
+            if (
+                (value = new URLSearchParams(window.location.search).get(key)) !== null ||
+                (this.testLocalStorage && (value = localStorage.getItem(key)) !== null)
+            ) {
+                return JSON.parse(value);
             } else return defaultVal;
         },
         apiUrl() {
@@ -194,7 +206,7 @@ const mixin = {
                 });
         },
         async updateWatched(videos) {
-            if (window.db) {
+            if (window.db && this.getPreferenceBoolean("watchHistory", false)) {
                 var tx = window.db.transaction("watch_history", "readonly");
                 var store = tx.objectStore("watch_history");
                 videos.map(async video => {
@@ -202,6 +214,7 @@ const mixin = {
                     request.onsuccess = function (event) {
                         if (event.target.result) {
                             video.watched = true;
+                            video.currentTime = event.target.result.currentTime;
                         }
                     };
                 });
@@ -222,7 +235,7 @@ const mixin = {
         handleLocalSubscriptions(channelId) {
             var localSubscriptions = this.getLocalSubscriptions() ?? [];
             if (localSubscriptions.includes(channelId))
-                localSubscriptions.splice(localSubscriptions.indexOf(channelId));
+                localSubscriptions.splice(localSubscriptions.indexOf(channelId), 1);
             else localSubscriptions.push(channelId);
             // Sort for better cache hits
             localSubscriptions.sort();
@@ -239,8 +252,8 @@ const mixin = {
             return localSubscriptions.join(",");
         },
         /* generate a temporary file and ask the user to download it */
-        download(text, filename, type) {
-            var file = new Blob([text], { type: type });
+        download(text, filename, mimeType) {
+            var file = new Blob([text], { type: mimeType });
 
             const elem = document.createElement("a");
 
@@ -248,6 +261,15 @@ const mixin = {
             elem.download = filename;
             elem.click();
             elem.remove();
+        },
+        rewriteDescription(text) {
+            return this.urlify(text)
+                .replaceAll(/(?:http(?:s)?:\/\/)?(?:www\.)?youtube\.com(\/[/a-zA-Z0-9_?=&-]*)/gm, "$1")
+                .replaceAll(
+                    /(?:http(?:s)?:\/\/)?(?:www\.)?youtu\.be\/(?:watch\?v=)?([/a-zA-Z0-9_?=&-]*)/gm,
+                    "/watch?v=$1",
+                )
+                .replaceAll("\n", "<br>");
         },
     },
     computed: {

@@ -12,7 +12,8 @@
         "instance": "Instância",
         "player": "Reprodutor",
         "livestreams": "Transmissões ao vivo",
-        "channels": "Canais"
+        "channels": "Canais",
+        "bookmarks": "Marcadores"
     },
     "actions": {
         "view_subscriptions": "Ver Subscrições",
@@ -45,7 +46,7 @@
         "language_selection": "Seleção de Idioma",
         "enabled_codecs": "\"Codecs\" Activados (Vários)",
         "instance_selection": "Seleção de Instância",
-        "show_more": "Mostrar Mais",
+        "show_more": "Mostrar mais",
         "import_from_json": "Importar de JSON/CSV",
         "loop_this_video": "Repetir este Vídeo",
         "auto_play_next_video": "Reproduzir Automaticamente o próximo Vídeo",
@@ -71,7 +72,7 @@
         "no": "Não",
         "filter": "Filtrar",
         "clear_history": "Limpar Histórico",
-        "disable_lbry": "Desactivar \"LBRY\" para Transmissão",
+        "disable_lbry": "Desactivar \"LBRY\" para \"Streaming\"",
         "loading": "A Carregar...",
         "please_select_playlist": "Selecionar uma lista de reprodução se faz favor",
         "select_playlist": "Selecionar uma Lista de Reprodução",
@@ -116,7 +117,15 @@
         "reply_count": "{count} respostas",
         "source_code": "Código-fonte",
         "instance_donations": "Doações de instâncias",
-        "no_valid_playlists": "O ficheiro não contém listas de reprodução válidas!"
+        "no_valid_playlists": "O ficheiro não contém listas de reprodução válidas!",
+        "bookmark_playlist": "Marcador",
+        "playlist_bookmarked": "Marcado",
+        "with_playlist": "Partilhar com lista de reprodução",
+        "skip_button_only": "Mostrar botão saltar",
+        "skip_automatically": "Automaticamente",
+        "min_segment_length": "Comprimento Mínimo do Segmento (em segundos)",
+        "skip_segment": "Saltar Segmento",
+        "show_less": "Mostrar menos"
     },
     "comment": {
         "pinned_by": "Afixado por {author}",
@@ -145,7 +154,9 @@
         "ratings_disabled": "Classificações Desactivadas",
         "chapters": "Capítulos",
         "live": "{0} em Direto",
-        "shorts": "\"Shorts\""
+        "shorts": "\"Shorts\"",
+        "all": "Todos",
+        "category": "Categoria"
     },
     "search": {
         "did_you_mean": "Será que querias dizer: {0}?",
@@ -169,6 +180,7 @@
         "page_not_found": "Página não encontrada",
         "copied": "Copiada!",
         "cannot_copy": "Não foi possível copiar!",
-        "local_storage": "Esta ação requer localStorage, os cookies estão ativados?"
+        "local_storage": "Esta ação requer localStorage, os cookies estão ativados?",
+        "register_no_email_note": "A utilização de um e-mail como nome de utilizador não é recomendada. Proceder de qualquer forma?"
     }
 }

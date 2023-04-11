@@ -7,7 +7,9 @@
         "ratings_disabled": "Valoraciones Desactivadas",
         "chapters": "Capítulos",
         "live": "{0} Directo",
-        "shorts": "Cortos"
+        "shorts": "Cortos",
+        "all": "Todos",
+        "category": "Categoría"
     },
     "preferences": {
         "ssl_score": "Puntuación SSL",
@@ -40,7 +42,7 @@
         "instance_selection": "Selección de instancias",
         "enabled_codecs": "Códecs habilitados (múltiples)",
         "instances_list": "Lista de instancias",
-        "language_selection": "Selección de lenguajes",
+        "language_selection": "Selección de idioma",
         "store_watch_history": "Recordar historial de visualización",
         "minimize_description_default": "Minimizar la descripción por defecto",
         "show_comments": "Mostrar comentarios",
@@ -126,7 +128,15 @@
         "minimize_comments": "Minimizar comentarios",
         "show_watch_on_youtube": "Mostrar botón Ver en YouTube",
         "minimize_chapters_default": "Minimiza capítulos por defecto",
-        "no_valid_playlists": "¡El archivo no contiene listas de reproducción válidas!"
+        "no_valid_playlists": "¡El archivo no contiene listas de reproducción válidas!",
+        "with_playlist": "Compartir con lista de reproducción",
+        "playlist_bookmarked": "Marcado",
+        "bookmark_playlist": "Marcador",
+        "skip_button_only": "Muestra botón de saltar",
+        "skip_automatically": "Automáticamente",
+        "min_segment_length": "Mínima Duración de Segmento (en segundos)",
+        "skip_segment": "Saltar Segmento",
+        "show_less": "Mostrar menos"
     },
     "titles": {
         "feed": "Fuente web",
@@ -141,7 +151,8 @@
         "instance": "Instancia",
         "player": "Reproductor",
         "livestreams": "Directos",
-        "channels": "Canales"
+        "channels": "Canales",
+        "bookmarks": "Marcadores"
     },
     "player": {
         "watch_on": "Ver en {0}"
@@ -169,6 +180,7 @@
         "page_not_found": "Página no encontrada",
         "copied": "¡Copiado!",
         "cannot_copy": "¡No se puede copiar!",
-        "local_storage": "Esta acción requiere «localStorage», ¿están activadas las «cookies»?"
+        "local_storage": "Esta acción requiere «localStorage», ¿están activadas las «cookies»?",
+        "register_no_email_note": "No se recomienda usar un correo electrónico como nombre de usuario. ¿Continuar de todos modos?"
     }
 }

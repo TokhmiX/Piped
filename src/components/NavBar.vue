@@ -1,5 +1,5 @@
 <template>
-    <nav class="flex flex-wrap items-center justify-center px-2 sm:px-4 py-2.5 w-full relative">
+    <nav class="flex flex-wrap items-center justify-center px-2 sm:px-4 pb-2.5 w-full relative">
         <div class="flex-1 flex justify-start">
             <router-link class="flex font-bold text-3xl items-center font-sans" to="/"
                 ><img
@@ -50,7 +50,7 @@
             <li v-if="shouldShowHistory">
                 <router-link v-t="'titles.history'" to="/history" />
             </li>
-            <li v-if="authenticated">
+            <li>
                 <router-link v-t="'titles.playlists'" to="/playlists" />
             </li>
             <li v-if="!shouldShowTrending">
@@ -79,7 +79,7 @@
         <li v-if="shouldShowHistory">
             <router-link v-t="'titles.history'" to="/history" />
         </li>
-        <li v-if="authenticated">
+        <li>
             <router-link v-t="'titles.playlists'" to="/playlists" />
         </li>
         <li v-if="!shouldShowTrending">

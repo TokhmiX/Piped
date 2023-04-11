@@ -6,11 +6,22 @@
         :class="{ 'player-container': !isEmbed }"
     >
         <video ref="videoEl" class="w-full" data-shaka-player :autoplay="shouldAutoPlay" :loop="selectedAutoLoop" />
+        <button
+            v-if="inSegment"
+            class="skip-segment-button"
+            type="button"
+            :aria-label="$t('actions.skip_segment')"
+            aria-pressed="false"
+            @click="onClickSkipSegment"
+        >
+            <span v-t="'actions.skip_segment'" />
+            <i class="material-icons-round">skip_next</i>
+        </button>
     </div>
 </template>
 
 <script>
-import("shaka-player/dist/controls.css");
+import "shaka-player/dist/controls.css";
 const shaka = import("shaka-player/dist/shaka-player.ui.js");
 if (!window.muxjs) {
     import("mux.js").then(muxjs => {
@@ -51,6 +62,7 @@ export default {
             lastUpdate: new Date().getTime(),
             initialSeekComplete: false,
             destroying: false,
+            inSegment: false,
         };
     },
     computed: {
@@ -88,7 +100,7 @@ export default {
         this.hotkeysPromise.then(() => {
             var self = this;
             this.$hotkeys(
-                "f,m,j,k,l,c,space,up,down,left,right,0,1,2,3,4,5,6,7,8,9,shift+n,shift+,,shift+.",
+                "f,m,j,k,l,c,space,up,down,left,right,0,1,2,3,4,5,6,7,8,9,shift+n,shift+,,shift+.,return,.,,",
                 function (e, handler) {
                     const videoEl = self.$refs.videoEl;
                     switch (handler.key) {
@@ -184,6 +196,17 @@ export default {
                         case "shift+.":
                             self.$player.trickPlay(Math.min(videoEl.playbackRate + 0.25, 2));
                             break;
+                        case "return":
+                            self.skipSegment(videoEl);
+                            break;
+                        case ".":
+                            videoEl.currentTime += 0.04;
+                            e.preventDefault();
+                            break;
+                        case ",":
+                            videoEl.currentTime -= 0.04;
+                            e.preventDefault();
+                            break;
                     }
                 },
             );
@@ -199,6 +222,8 @@ export default {
     },
     methods: {
         async loadVideo() {
+            this.updateSponsors();
+
             const component = this;
             const videoEl = this.$refs.videoEl;
 
@@ -226,7 +251,7 @@ export default {
                 }
                 videoEl.currentTime = start;
                 this.initialSeekComplete = true;
-            } else if (window.db) {
+            } else if (window.db && this.getPreferenceBoolean("watchHistory", false)) {
                 var tx = window.db.transaction("watch_history", "readonly");
                 var store = tx.objectStore("watch_history");
                 var request = store.get(this.video.id);
@@ -256,9 +281,7 @@ export default {
 
             const MseSupport = window.MediaSource !== undefined;
 
-            const lbry = this.getPreferenceBoolean("disableLBRY", false)
-                ? null
-                : this.video.videoStreams.filter(stream => stream.quality === "LBRY")[0];
+            const lbry = null;
 
             var uri;
             var mime;
@@ -268,9 +291,10 @@ export default {
                 mime = "application/x-mpegURL";
             } else if (this.video.audioStreams.length > 0 && !lbry && MseSupport) {
                 if (!this.video.dash) {
-                    const dash = (
-                        await import("@/utils/DashUtils.js").then(mod => mod.default)
-                    ).generate_dash_file_from_formats(streams, this.video.duration);
+                    const dash = (await import("../utils/DashUtils.js")).generate_dash_file_from_formats(
+                        streams,
+                        this.video.duration,
+                    );
 
                     uri = "data:application/dash+xml;charset=utf-8;base64," + btoa(dash);
                 } else {
@@ -306,7 +330,7 @@ export default {
                 uri = this.video.hls;
                 mime = "application/x-mpegURL";
             } else {
-                uri = this.video.videoStreams.filter(stream => stream.codec == null).slice(-1)[0].url;
+                uri = this.video.videoStreams.findLast(stream => stream.codec == null).url;
                 mime = "video/mp4";
             }
 
@@ -356,22 +380,19 @@ export default {
             else this.setPlayerAttrs(this.$player, videoEl, uri, mime, this.$shaka);
 
             if (noPrevPlayer) {
+                videoEl.addEventListener("loadeddata", () => {
+                    if (document.pictureInPictureElement) videoEl.requestPictureInPicture();
+                });
                 videoEl.addEventListener("timeupdate", () => {
                     const time = videoEl.currentTime;
                     this.$emit("timeupdate", time);
                     this.updateProgressDatabase(time);
                     if (this.sponsors && this.sponsors.segments) {
-                        this.sponsors.segments.map(segment => {
-                            if (!segment.skipped || this.selectedAutoLoop) {
-                                const end = segment.segment[1];
-                                if (time >= segment.segment[0] && time < end) {
-                                    console.log("Skipped segment at " + time);
-                                    videoEl.currentTime = end;
-                                    segment.skipped = true;
-                                    return;
-                                }
-                            }
-                        });
+                        const segment = this.findCurrentSegment(time);
+                        this.inSegment = !!segment;
+                        if (segment?.autoskip && (!segment.skipped || this.selectedAutoLoop)) {
+                            this.skipSegment(videoEl, segment);
+                        }
                     }
                 });
 
@@ -397,6 +418,21 @@ export default {
             }
 
             //TODO: Add sponsors on seekbar: https://github.com/ajayyy/SponsorBlock/blob/e39de9fd852adb9196e0358ed827ad38d9933e29/src/js-components/previewBar.ts#L12
+        },
+        findCurrentSegment(time) {
+            return this.sponsors?.segments?.find(s => time >= s.segment[0] && time < s.segment[1]);
+        },
+        onClickSkipSegment() {
+            const videoEl = this.$refs.videoEl;
+            this.skipSegment(videoEl);
+        },
+        skipSegment(videoEl, segment) {
+            const time = videoEl.currentTime;
+            if (!segment) segment = this.findCurrentSegment(time);
+            if (!segment) return;
+            console.log("Skipped segment at " + time);
+            videoEl.currentTime = segment.segment[1];
+            segment.skipped = true;
         },
         setPlayerAttrs(localPlayer, videoEl, uri, mime, shaka) {
             const url = "/watch?v=" + this.video.id;
@@ -471,6 +507,9 @@ export default {
 
             this.updateMarkers();
 
+            const event = new Event("playerInit");
+            window.dispatchEvent(event);
+
             const player = this.$ui.getControls().getPlayer();
 
             this.$player = player;
@@ -543,7 +582,7 @@ export default {
                     player.addTextTrackAsync(
                         subtitle.url,
                         subtitle.code,
-                        "SUBTITLE",
+                        "subtitles",
                         subtitle.mimeType,
                         null,
                         subtitle.name,
@@ -554,6 +593,10 @@ export default {
                 videoEl.playbackRate = rate;
                 videoEl.defaultPlaybackRate = rate;
             });
+
+            // expand the player to fullscreen when the fullscreen query equals true
+            if (this.$route.query.fullscreen === "true" && !this.$ui.getControls().isFullScreenEnabled())
+                this.$ui.getControls().toggleFullScreen();
         },
         async updateProgressDatabase(time) {
             // debounce
@@ -597,6 +640,8 @@ export default {
                         searchParams.set(param, params[param]);
                         break;
                 }
+            // save the fullscreen state
+            searchParams.set("fullscreen", this.$ui.getControls().isFullScreenEnabled());
             const paramStr = searchParams.toString();
             if (paramStr.length > 0) url += "&" + paramStr;
             this.$router.push(url);
@@ -653,27 +698,30 @@ export default {
 
             if (markers) markers.style.background = `linear-gradient(${array.join(",")})`;
         },
+        updateSponsors() {
+            const skipOptions = this.getPreferenceJSON("skipOptions", {});
+            this.sponsors?.segments?.forEach(segment => {
+                const option = skipOptions[segment.category];
+                segment.autoskip = option === undefined || option === "auto";
+            });
+            if (this.getPreferenceBoolean("showMarkers", true)) {
+                this.shakaPromise.then(() => {
+                    this.updateMarkers();
+                });
+            }
+        },
         destroy(hotkeys) {
-            if (this.$ui) {
+            if (this.$ui && !document.pictureInPictureElement) {
                 this.$ui.destroy();
                 this.$ui = undefined;
                 this.$player = undefined;
             }
             if (this.$player) {
                 this.$player.destroy();
-                this.$player = undefined;
+                if (!document.pictureInPictureElement) this.$player = undefined;
             }
             if (hotkeys) this.$hotkeys?.unbind();
             this.$refs.container?.querySelectorAll("div").forEach(node => node.remove());
-        },
-    },
-    watch: {
-        sponsors() {
-            if (this.getPreferenceBoolean("showMarkers", true)) {
-                this.shakaPromise.then(() => {
-                    this.updateMarkers();
-                });
-            }
         },
     },
 };
@@ -709,5 +757,36 @@ export default {
 .shaka-text-wrapper > span > span *:first-child:last-child {
     background-color: rgba(0, 0, 0, 0.6) !important;
     padding: 0.09em 0;
+}
+
+.skip-segment-button {
+    /* position button above player overlay */
+    z-index: 1000;
+
+    position: absolute;
+    transform: translate(0, -50%);
+    top: 50%;
+    right: 0;
+
+    background-color: rgb(0 0 0 / 0.5);
+    border: 2px rgba(255, 255, 255, 0.75) solid;
+    border-right: 0;
+    border-radius: 0.75em;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 0.5em;
+
+    /* center text vertically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #fff;
+    line-height: 1.5em;
+}
+
+.skip-segment-button .material-icons-round {
+    font-size: 1.6em !important;
+    line-height: inherit !important;
 }
 </style>

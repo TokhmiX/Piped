@@ -1,9 +1,7 @@
 <template>
-    <h1 class="font-bold text-center my-4" v-t="'titles.playlists'" />
+    <h2 v-if="authenticated" class="font-bold my-4" v-t="'titles.playlists'" />
 
-    <hr />
-
-    <div class="flex justify-between mb-3">
+    <div v-if="authenticated" class="flex justify-between mb-3">
         <button v-t="'actions.create_playlist'" class="btn" @click="onCreatePlaylist" />
         <div class="flex">
             <button
@@ -38,6 +36,35 @@
             <button class="btn h-auto ml-2" @click="deletePlaylist(playlist.id)" v-t="'actions.delete_playlist'" />
         </div>
     </div>
+    <hr />
+
+    <h2 class="font-bold my-4" v-t="'titles.bookmarks'" />
+
+    <div v-if="bookmarks" class="video-grid">
+        <router-link
+            v-for="(playlist, index) in bookmarks"
+            :key="playlist.playlistId"
+            :to="`/playlist?list=${playlist.playlistId}`"
+        >
+            <img class="w-full" :src="playlist.thumbnail" alt="thumbnail" />
+            <div class="relative text-sm">
+                <span class="thumbnail-overlay thumbnail-right" v-text="`${playlist.videos} ${$t('video.videos')}`" />
+                <div class="absolute bottom-100px right-5px px-5px z-100" @click.prevent="removeBookmark(index)">
+                    <font-awesome-icon class="ml-3" icon="bookmark" />
+                </div>
+            </div>
+            <p
+                style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical"
+                class="my-2 overflow-hidden flex link"
+                :title="playlist.name"
+                v-text="playlist.name"
+            />
+            <a :href="playlist.uploaderUrl" class="flex items-center">
+                <img class="rounded-full w-32px h-32px" :src="playlist.uploaderAvatar" />
+                <span class="ml-3 hover:underline" v-text="playlist.uploader" />
+            </a>
+        </router-link>
+    </div>
     <br />
 </template>
 
@@ -46,11 +73,12 @@ export default {
     data() {
         return {
             playlists: [],
+            bookmarks: [],
         };
     },
     mounted() {
         if (this.authenticated) this.fetchPlaylists();
-        else this.$router.push("/login");
+        this.loadPlaylistBookmarks();
     },
     activated() {
         document.title = this.$t("titles.playlists") + " - Piped";
@@ -134,10 +162,7 @@ export default {
                 version: 1,
                 playlists: [],
             };
-            let tasks = [];
-            for (var i = 0; i < this.playlists.length; i++) {
-                tasks.push(this.fetchPlaylistJson(this.playlists[i].id));
-            }
+            let tasks = this.playlists.map(playlist => this.fetchPlaylistJson(playlist.id));
             json.playlists = await Promise.all(tasks);
             this.download(JSON.stringify(json), "playlists.json", "application/json");
         },
@@ -150,31 +175,44 @@ export default {
                 // as Invidious supports public and private playlists
                 visibility: "private",
                 // list of the videos, starting with "https://youtube.com" to clarify that those are YT videos
-                videos: [],
+                videos: playlist.relatedStreams.map(stream => "https://youtube.com" + stream.url),
             };
-            for (var i = 0; i < playlist.relatedStreams.length; i++) {
-                playlistJson.videos.push("https://youtube.com" + playlist.relatedStreams[i].url);
-            }
             return playlistJson;
         },
         async importPlaylists() {
             const file = this.$refs.fileSelector.files[0];
             let text = await file.text();
-            let playlists = JSON.parse(text).playlists;
-            if (!playlists.length) {
+            let tasks = [];
+            // list of playlists exported from Piped
+            if (text.includes("playlists")) {
+                let playlists = JSON.parse(text).playlists;
+                if (!playlists.length) {
+                    alert(this.$t("actions.no_valid_playlists"));
+                    return;
+                }
+                for (var i = 0; i < playlists.length; i++) {
+                    tasks.push(this.createPlaylistWithVideos(playlists[i]));
+                }
+                // CSV from Google Takeout
+            } else if (file.name.slice(-4).toLowerCase() == ".csv") {
+                const lines = text.split("\n");
+                const playlist = {
+                    name: lines[1].split(",")[4],
+                    videos: lines
+                        .slice(4, lines.length)
+                        .filter(line => line != "")
+                        .map(line => `https://youtube.com/watch?v=${line.split(",")[0]}`),
+                };
+                tasks.push(this.createPlaylistWithVideos(playlist));
+            } else {
                 alert(this.$t("actions.no_valid_playlists"));
                 return;
-            }
-            let tasks = [];
-            for (var i = 0; i < playlists.length; i++) {
-                tasks.push(this.createPlaylistWithVideos(playlists[i]));
             }
             await Promise.all(tasks);
             window.location.reload();
         },
         async createPlaylistWithVideos(playlist) {
             let newPlaylist = await this.createPlaylist(playlist.name);
-            console.log(newPlaylist);
             let videoIds = playlist.videos.map(url => url.substr(-11));
             await this.addVideosToPlaylist(newPlaylist.playlistId, videoIds);
         },
@@ -190,6 +228,26 @@ export default {
                     "Content-Type": "application/json",
                 },
             });
+        },
+        async loadPlaylistBookmarks() {
+            if (!window.db) return;
+            var tx = window.db.transaction("playlist_bookmarks", "readonly");
+            var store = tx.objectStore("playlist_bookmarks");
+            const cursorRequest = store.openCursor();
+            cursorRequest.onsuccess = e => {
+                const cursor = e.target.result;
+                if (cursor) {
+                    const bookmark = cursor.value;
+                    this.bookmarks.push(bookmark);
+                    cursor.continue();
+                }
+            };
+        },
+        async removeBookmark(index) {
+            var tx = window.db.transaction("playlist_bookmarks", "readwrite");
+            var store = tx.objectStore("playlist_bookmarks");
+            store.delete(this.bookmarks[index].playlistId);
+            this.bookmarks.splice(index, 1);
         },
     },
 };

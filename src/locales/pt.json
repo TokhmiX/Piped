@@ -12,7 +12,8 @@
         "instance": "Instância",
         "player": "Reprodutor",
         "livestreams": "Transmissões ao vivo",
-        "channels": "Canais"
+        "channels": "Canais",
+        "bookmarks": "Marcadores"
     },
     "actions": {
         "sort_by": "Ordenar por:",
@@ -38,7 +39,7 @@
         "instances_list": "Lista de Instâncias",
         "enabled_codecs": "\"Codecs\" Activados (Vários)",
         "instance_selection": "Seleção de Instância",
-        "show_more": "Mostrar Mais",
+        "show_more": "Mostrar mais",
         "import_from_json": "Importar de JSON/CSV",
         "export_to_json": "Exportar para JSON",
         "loop_this_video": "Repetir este Vídeo",
@@ -116,7 +117,15 @@
         "with_timecode": "Partilhar com código de tempo",
         "show_chapters": "Capítulos",
         "reply_count": "{count} respostas",
-        "no_valid_playlists": "O ficheiro não contém listas de reprodução válidas!"
+        "no_valid_playlists": "O ficheiro não contém listas de reprodução válidas!",
+        "with_playlist": "Partilhar com lista de reprodução",
+        "playlist_bookmarked": "Marcado",
+        "bookmark_playlist": "Marcador",
+        "skip_button_only": "Mostrar botão saltar",
+        "skip_automatically": "Automaticamente",
+        "min_segment_length": "Comprimento Mínimo do Segmento (em segundos)",
+        "skip_segment": "Saltar Segmento",
+        "show_less": "Mostrar menos"
     },
     "preferences": {
         "instance_name": "Nome da Instância",
@@ -139,7 +148,9 @@
         "ratings_disabled": "Classificações Desactivadas",
         "chapters": "Capítulos",
         "live": "{0} em Direto",
-        "shorts": "\"Shorts\""
+        "shorts": "\"Shorts\"",
+        "all": "Todos",
+        "category": "Categoria"
     },
     "search": {
         "did_you_mean": "Será que querias dizer: {0}?",
@@ -169,6 +180,7 @@
         "cannot_copy": "Não foi possível copiar!",
         "page_not_found": "Página não encontrada",
         "local_storage": "Esta ação requer localStorage, os cookies estão ativados?",
-        "preferences_note": "Nota: as configurações são guardadas no armazenamento local to seu navegador. Eliminar os dados de navegação irá redefini-las."
+        "preferences_note": "Nota: as configurações são guardadas no armazenamento local to seu navegador. Eliminar os dados de navegação irá redefini-las.",
+        "register_no_email_note": "Não recomendamos utilizar um endereço de email como nome de utilizador. Continuar?"
     }
 }

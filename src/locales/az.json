@@ -12,7 +12,8 @@
         "instance": "Nümunə",
         "player": "Oynadıcı",
         "livestreams": "Canlı yayımlar",
-        "channels": "Kanallar"
+        "channels": "Kanallar",
+        "bookmarks": "Əlfəcinlər"
     },
     "player": {
         "watch_on": "{0} saytında bax"
@@ -79,7 +80,7 @@
         "minimize_description_default": "Açıqlamanı Defolt Olaraq Kiçilt",
         "language_selection": "Dil Seçimi",
         "instances_list": "Nümunələr Siyahısı",
-        "show_more": "Daha Çox Göstər",
+        "show_more": "Daha çox göstər",
         "no": "Xeyr",
         "store_watch_history": "Baxış Tarixçəsini Saxla",
         "enabled_codecs": "Aktiv Kodeklər (Birdən çox)",
@@ -119,7 +120,15 @@
         "minimize_comments": "Şərhləri Kiçilt",
         "minimize_chapters_default": "Defolt olaraq bölmələri kiçilt",
         "show_watch_on_youtube": "YouTube-da Baxış düyməsini göstər",
-        "no_valid_playlists": "Faylda etibarlı pleylistlər yoxdur!"
+        "no_valid_playlists": "Faylda etibarlı pleylistlər yoxdur!",
+        "with_playlist": "Pleylistlə paylaş",
+        "bookmark_playlist": "Əlfəcin",
+        "playlist_bookmarked": "Əlfəcinləndi",
+        "skip_button_only": "Ötürmə düyməsin göstər",
+        "skip_automatically": "Avtomatik olaraq",
+        "min_segment_length": "Minimum Seqment Uzunluğu (saniyələrlə)",
+        "skip_segment": "Seqmenti ötür",
+        "show_less": "Daha az göstər"
     },
     "comment": {
         "pinned_by": "Tərəfindən Sabitləndi {author}",
@@ -148,7 +157,9 @@
         "ratings_disabled": "Reytinqlər Deaktivdir",
         "chapters": "Bölmələr",
         "live": "{0} Canlı",
-        "shorts": "Qısa"
+        "shorts": "Qısa",
+        "all": "Hamısı",
+        "category": "Kateqoriya"
     },
     "search": {
         "did_you_mean": "Bunu nəzərdə tutursunuz: {0}?",
@@ -172,6 +183,7 @@
         "page_not_found": "Səhifə tapılmadı",
         "copied": "Kopyalandı!",
         "cannot_copy": "Kopyalanmır!",
-        "local_storage": "Bu fəaliyyət localStorage tələb edir, məlumat bazası aktivdir?"
+        "local_storage": "Bu fəaliyyət localStorage tələb edir, məlumat bazası aktivdir?",
+        "register_no_email_note": "E-poçt-u istifadəçi adı kimi istifadə etmək tövsiyə edilmir. Baxmayaraq ki, davam edilsin?"
     }
 }
