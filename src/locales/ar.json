@@ -13,7 +13,8 @@
         "player": "المشغل",
         "livestreams": "البث المباشر",
         "channels": "القنوات",
-        "bookmarks": "الاشارات المرجعيه"
+        "bookmarks": "الاشارات المرجعيه",
+        "channel_groups": "مجموعات القنوات"
     },
     "player": {
         "watch_on": "شاهد عبر"
@@ -42,7 +43,7 @@
         "enable_sponsorblock": "تفعيل مانع الإعلانات",
         "auto": "تلقائي",
         "dark": "داكن",
-        "search": "بحث",
+        "search": "‏بحث (Ctrl+K)",
         "autoplay_video": "تشغيل تلقائي",
         "audio_only": "صوت فقط",
         "default_quality": "الجودة الأساسية",
@@ -106,8 +107,6 @@
         "follow_link": "اتبع الرابط",
         "copy_link": "نسخ الرابط",
         "time_code": "رمز الوقت (بالثواني)",
-        "rename_playlist": "إعادة تسمية قائمة التشغيل",
-        "new_playlist_name": "اسم قائمة تشغيل جديد",
         "show_chapters": "الفصول",
         "store_search_history": "حفظ سجل البحث",
         "documentation": "التوثيق",
@@ -128,7 +127,17 @@
         "skip_automatically": "تلقائيا",
         "min_segment_length": "الحد الأدنى لطول الفصل (بالثواني)",
         "skip_segment": "تخطي الجزء",
-        "show_less": "عرض أقل"
+        "show_less": "عرض أقل",
+        "autoplay_next_countdown": "العد التنازلي الافتراضي حتى الفيديو التالي ( ثانية )",
+        "dismiss": "تجاهل",
+        "group_name": "أسم المجموعة",
+        "create_group": "إنشاء مجموعة",
+        "auto_display_captions": "عرض التسميات التوضيحية تلقائيا",
+        "cancel": "إلغاء",
+        "okay": "حسنًا",
+        "playlist_description": "وصف قائمة التشغيل",
+        "playlist_name": "اسم قائمة التشغيل",
+        "edit_playlist": "تعديل قائمة التشغيل"
     },
     "video": {
         "sponsor_segments": "المقاطع الإعلانية",
@@ -184,6 +193,7 @@
         "copied": "نسخ!",
         "cannot_copy": "لا يمكن نسخه!",
         "local_storage": "يتطلب هذا الإجراء التخزين المحلي، هل يتم تمكين ملفات تعريف الارتباط؟",
-        "register_no_email_note": "لا ينصح باستخدام البريد الإلكتروني كاسم مستخدم. المضي قدما على أي حال؟"
+        "register_no_email_note": "لا ينصح باستخدام البريد الإلكتروني كاسم مستخدم. المضي قدما على أي حال؟",
+        "next_video_countdown": "تشغيل الفيديو التالي بعد { 0 } ق"
     }
 }

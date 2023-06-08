@@ -45,6 +45,26 @@
             @change="onChange($event)"
         />
     </label>
+    <label class="pref" for="chkAutoDisplayCaptions">
+        <strong v-t="'actions.auto_display_captions'" />
+        <input
+            id="chkAutoDisplayCaptions"
+            v-model="autoDisplayCaptions"
+            class="checkbox"
+            type="checkbox"
+            @change="onChange($event)"
+        />
+    </label>
+    <label class="pref" for="chkAutoPlayNextCountdown">
+        <strong v-t="'actions.autoplay_next_countdown'" />
+        <input
+            id="chkAutoPlayNextCountdown"
+            v-model="autoPlayNextCountdown"
+            class="input w-24"
+            type="number"
+            @change="onChange($event)"
+        />
+    </label>
     <label class="pref" for="chkAudioOnly">
         <strong v-t="'actions.audio_only'" />
         <input id="chkAudioOnly" v-model="listen" class="checkbox" type="checkbox" @change="onChange($event)" />
@@ -315,14 +335,21 @@
     <br />
     <p v-t="'info.preferences_note'" />
     <br />
-    <button class="btn" v-t="'actions.reset_preferences'" @click="resetPreferences()" />
+    <button class="btn" v-t="'actions.reset_preferences'" @click="showConfirmResetPrefsDialog = true" />
     <button class="btn mx-4" v-t="'actions.backup_preferences'" @click="backupPreferences()" />
     <label for="fileSelector" class="btn" v-t="'actions.restore_preferences'" @click="restorePreferences()" />
     <input class="hidden" id="fileSelector" ref="fileSelector" type="file" @change="restorePreferences()" />
+    <ConfirmModal
+        v-if="showConfirmResetPrefsDialog"
+        @close="showConfirmResetPrefsDialog = false"
+        @confirm="resetPreferences()"
+        :message="$t('actions.confirm_reset_preferences')"
+    />
 </template>
 
 <script>
 import CountryMap from "@/utils/CountryMaps/en.json";
+import ConfirmModal from "./ConfirmModal.vue";
 export default {
     data() {
         return {
@@ -346,6 +373,8 @@ export default {
             minSegmentLength: 0,
             selectedTheme: "dark",
             autoPlayVideo: true,
+            autoDisplayCaptions: false,
+            autoPlayNextCountdown: 5,
             listen: false,
             resolutions: [144, 240, 360, 480, 720, 1080, 1440, 2160, 4320],
             defaultQuality: 0,
@@ -416,6 +445,7 @@ export default {
             disableLBRY: false,
             proxyLBRY: false,
             password: null,
+            showConfirmResetPrefsDialog: false,
         };
     },
     activated() {
@@ -462,6 +492,8 @@ export default {
             this.minSegmentLength = Math.max(this.getPreferenceNumber("minSegmentLength", 0), 0);
             this.selectedTheme = this.getPreferenceString("theme", "dark");
             this.autoPlayVideo = this.getPreferenceBoolean("playerAutoPlay", true);
+            this.autoDisplayCaptions = this.getPreferenceBoolean("autoDisplayCaptions", false);
+            this.autoPlayNextCountdown = this.getPreferenceNumber("autoPlayNextCountdown", 5);
             this.listen = this.getPreferenceBoolean("listen", false);
             this.defaultQuality = Number(localStorage.getItem("quality"));
             this.bufferingGoal = Math.max(Number(localStorage.getItem("bufferGoal")), 10);
@@ -516,6 +548,8 @@ export default {
                 localStorage.setItem("minSegmentLength", this.minSegmentLength);
                 localStorage.setItem("theme", this.selectedTheme);
                 localStorage.setItem("playerAutoPlay", this.autoPlayVideo);
+                localStorage.setItem("autoDisplayCaptions", this.autoDisplayCaptions);
+                localStorage.setItem("autoPlayNextCountdown", this.autoPlayNextCountdown);
                 localStorage.setItem("listen", this.listen);
                 localStorage.setItem("quality", this.defaultQuality);
                 localStorage.setItem("bufferGoal", this.bufferingGoal);
@@ -563,7 +597,7 @@ export default {
             window.location = "/";
         },
         resetPreferences() {
-            if (!confirm(this.$t("actions.confirm_reset_preferences"))) return;
+            this.showConfirmResetPrefsDialog = false;
             // clear the local storage
             localStorage.clear();
             // redirect to the home page
@@ -595,6 +629,9 @@ export default {
                 window.location.reload();
             });
         },
+    },
+    components: {
+        ConfirmModal,
     },
 };
 </script>

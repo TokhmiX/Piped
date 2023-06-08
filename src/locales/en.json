@@ -13,7 +13,8 @@
         "player": "Player",
         "livestreams": "Livestreams",
         "channels": "Channels",
-        "bookmarks": "Bookmarks"
+        "bookmarks": "Bookmarks",
+        "channel_groups": "Channel groups"
     },
     "player": {
         "watch_on": "Watch on {0}"
@@ -49,6 +50,7 @@
         "dark": "Dark",
         "light": "Light",
         "autoplay_video": "Autoplay Video",
+        "autoplay_next_countdown": "Default Countdown until next video (in seconds)",
         "audio_only": "Audio Only",
         "default_quality": "Default Quality",
         "buffering_goal": "Buffering Goal (in seconds)",
@@ -68,6 +70,7 @@
         "import_from_json": "Import from JSON/CSV",
         "loop_this_video": "Loop this Video",
         "auto_play_next_video": "Auto Play next Video",
+        "auto_display_captions": "Auto Display Captions",
         "donations": "Development donations",
         "minimize_comments": "Minimize Comments",
         "show_comments": "Show Comments",
@@ -78,7 +81,7 @@
         "disable_lbry": "Disable LBRY for Streaming",
         "enable_lbry_proxy": "Enable Proxy for LBRY",
         "view_ssl_score": "View SSL Score",
-        "search": "Search",
+        "search": "Search (Ctrl+K)",
         "filter": "Filter",
         "loading": "Loading...",
         "clear_history": "Clear History",
@@ -108,8 +111,9 @@
         "backup_preferences": "Backup preferences",
         "restore_preferences": "Restore preferences",
         "back_to_home": "Back to home",
-        "rename_playlist": "Rename playlist",
-        "new_playlist_name": "New playlist name",
+        "edit_playlist": "Edit playlist",
+        "playlist_name": "Playlist name",
+        "playlist_description": "Playlist description",
         "share": "Share",
         "with_timecode": "Share with time code",
         "piped_link": "Piped link",
@@ -128,8 +132,12 @@
         "with_playlist": "Share with playlist",
         "bookmark_playlist": "Bookmark",
         "playlist_bookmarked": "Bookmarked",
-	"show_more": "Show more",
-	"show_less": "Show less"
+        "dismiss": "Dismiss",
+        "show_less": "Show less",
+        "create_group": "Create group",
+        "group_name": "Group name",
+        "cancel": "Cancel",
+        "okay": "Okay"
     },
     "comment": {
         "pinned_by": "Pinned by {author}",
@@ -182,6 +190,7 @@
         "copied": "Copied!",
         "cannot_copy": "Can't copy!",
         "local_storage": "This action requires localStorage, are cookies enabled?",
-        "register_no_email_note": "Using an e-mail as username is not recommended. Proceed anyways?"
+        "register_no_email_note": "Using an e-mail as username is not recommended. Proceed anyways?",
+        "next_video_countdown": "Playing next video in {0}s"
     }
 }

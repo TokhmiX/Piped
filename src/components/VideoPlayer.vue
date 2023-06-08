@@ -6,6 +6,7 @@
         :class="{ 'player-container': !isEmbed }"
     >
         <video ref="videoEl" class="w-full" data-shaka-player :autoplay="shouldAutoPlay" :loop="selectedAutoLoop" />
+        <canvas id="preview" />
         <button
             v-if="inSegment"
             class="skip-segment-button"
@@ -22,6 +23,7 @@
 
 <script>
 import "shaka-player/dist/controls.css";
+import { parseTimeParam } from "@/utils/Misc";
 const shaka = import("shaka-player/dist/shaka-player.ui.js");
 if (!window.muxjs) {
     import("mux.js").then(muxjs => {
@@ -37,14 +39,6 @@ export default {
             default: () => {
                 return {};
             },
-        },
-        playlist: {
-            type: Object,
-            default: null,
-        },
-        index: {
-            type: Number,
-            default: -1,
         },
         sponsors: {
             type: Object,
@@ -63,6 +57,7 @@ export default {
             initialSeekComplete: false,
             destroying: false,
             inSegment: false,
+            isHoveringTimebar: false,
         };
     },
     computed: {
@@ -100,7 +95,7 @@ export default {
         this.hotkeysPromise.then(() => {
             var self = this;
             this.$hotkeys(
-                "f,m,j,k,l,c,space,up,down,left,right,0,1,2,3,4,5,6,7,8,9,shift+n,shift+,,shift+.,return,.,,",
+                "f,m,j,k,l,c,space,up,down,left,right,0,1,2,3,4,5,6,7,8,9,shift+n,shift+,,shift+.,alt+p,return,.,,",
                 function (e, handler) {
                     const videoEl = self.$refs.videoEl;
                     switch (handler.key) {
@@ -196,6 +191,11 @@ export default {
                         case "shift+.":
                             self.$player.trickPlay(Math.min(videoEl.playbackRate + 0.25, 2));
                             break;
+                        case "alt+p":
+                            document.pictureInPictureElement
+                                ? document.exitPictureInPicture()
+                                : videoEl.requestPictureInPicture();
+                            break;
                         case "return":
                             self.skipSegment(videoEl);
                             break;
@@ -232,24 +232,7 @@ export default {
             const time = this.$route.query.t ?? this.$route.query.start;
 
             if (time) {
-                let start = 0;
-                if (/^[\d]*$/g.test(time)) {
-                    start = time;
-                } else {
-                    const hours = /([\d]*)h/gi.exec(time)?.[1];
-                    const minutes = /([\d]*)m/gi.exec(time)?.[1];
-                    const seconds = /([\d]*)s/gi.exec(time)?.[1];
-                    if (hours) {
-                        start += parseInt(hours) * 60 * 60;
-                    }
-                    if (minutes) {
-                        start += parseInt(minutes) * 60;
-                    }
-                    if (seconds) {
-                        start += parseInt(seconds);
-                    }
-                }
-                videoEl.currentTime = start;
+                videoEl.currentTime = parseTimeParam(time);
                 this.initialSeekComplete = true;
             } else if (window.db && this.getPreferenceBoolean("watchHistory", false)) {
                 var tx = window.db.transaction("watch_history", "readonly");
@@ -407,13 +390,7 @@ export default {
                 });
 
                 videoEl.addEventListener("ended", () => {
-                    if (
-                        !this.selectedAutoLoop &&
-                        this.selectedAutoPlay &&
-                        (this.playlist?.relatedStreams?.length > 0 || this.video.relatedStreams.length > 0)
-                    ) {
-                        this.navigateNext();
-                    }
+                    this.$emit("ended");
                 });
             }
 
@@ -512,6 +489,8 @@ export default {
 
             const player = this.$ui.getControls().getPlayer();
 
+            this.setupSeekbarPreview();
+
             this.$player = player;
 
             const disableVideo = this.getPreferenceBoolean("listen", false) && !this.video.livestream;
@@ -592,6 +571,9 @@ export default {
                 const rate = this.getPreferenceNumber("rate", 1);
                 videoEl.playbackRate = rate;
                 videoEl.defaultPlaybackRate = rate;
+
+                const autoDisplayCaptions = this.getPreferenceBoolean("autoDisplayCaptions", false);
+                this.$player.setTextTrackVisibility(autoDisplayCaptions);
             });
 
             // expand the player to fullscreen when the fullscreen query equals true
@@ -620,31 +602,6 @@ export default {
             if (this.$refs.videoEl) {
                 this.$refs.videoEl.currentTime = time;
             }
-        },
-        navigateNext() {
-            const params = this.$route.query;
-            let url = this.playlist?.relatedStreams?.[this.index]?.url ?? this.video.relatedStreams[0].url;
-            const searchParams = new URLSearchParams();
-            for (var param in params)
-                switch (param) {
-                    case "v":
-                    case "t":
-                        break;
-                    case "index":
-                        if (this.index < this.playlist.relatedStreams.length) searchParams.set("index", this.index + 1);
-                        break;
-                    case "list":
-                        if (this.index < this.playlist.relatedStreams.length) searchParams.set("list", params.list);
-                        break;
-                    default:
-                        searchParams.set(param, params[param]);
-                        break;
-                }
-            // save the fullscreen state
-            searchParams.set("fullscreen", this.$ui.getControls().isFullScreenEnabled());
-            const paramStr = searchParams.toString();
-            if (paramStr.length > 0) url += "&" + paramStr;
-            this.$router.push(url);
         },
         updateMarkers() {
             const markers = this.$refs.container.querySelector(".shaka-ad-markers");
@@ -709,6 +666,94 @@ export default {
                     this.updateMarkers();
                 });
             }
+        },
+        setupSeekbarPreview() {
+            if (!this.video.previewFrames) return;
+            let seekBar = document.querySelector(".shaka-seek-bar");
+            // load the thumbnail preview when the user moves over the seekbar
+            seekBar.addEventListener("mousemove", e => {
+                this.isHoveringTimebar = true;
+                const position = (e.offsetX / e.target.offsetWidth) * this.video.duration;
+                this.showSeekbarPreview(position * 1000);
+            });
+            // hide the preview when the user stops hovering the seekbar
+            seekBar.addEventListener("mouseout", () => {
+                this.isHoveringTimebar = false;
+                let canvas = document.querySelector("#preview");
+                canvas.style.display = "none";
+            });
+        },
+        async showSeekbarPreview(position) {
+            const frame = this.getFrame(position);
+            const originalImage = await this.loadImage(frame.url);
+            if (!this.isHoveringTimebar) return;
+
+            const seekBar = document.querySelector(".shaka-seek-bar");
+            const canvas = document.querySelector("#preview");
+            const ctx = canvas.getContext("2d");
+
+            // get the new sizes for the image to be drawn into the canvas
+            const originalWidth = originalImage.naturalWidth;
+            const originalHeight = originalImage.naturalHeight;
+            // image can have less frames than server told us so calculate them ourselves
+            const imageFramesPerPageX = originalImage.naturalWidth / frame.frameWidth;
+            const imageFramesPerPageY = originalImage.naturalHeight / frame.frameHeight;
+            const offsetX = originalWidth * (frame.positionX / imageFramesPerPageX);
+            const offsetY = originalHeight * (frame.positionY / imageFramesPerPageY);
+
+            canvas.width = frame.frameWidth > 100 ? frame.frameWidth : frame.frameWidth * 2;
+            canvas.height = frame.frameWidth > 100 ? frame.frameHeight : frame.frameHeight * 2;
+            // draw the thumbnail preview into the canvas by cropping only the relevant part
+            ctx.drawImage(
+                originalImage,
+                offsetX,
+                offsetY,
+                frame.frameWidth,
+                frame.frameHeight,
+                0,
+                0,
+                canvas.width,
+                canvas.height,
+            );
+
+            // calculate the thumbnail preview offset and display it
+            const seekbarPadding = 2; // percentage of seekbar padding
+            const centerOffset = position / this.video.duration / 10;
+            const left = centerOffset - ((0.5 * canvas.width) / seekBar.clientWidth) * 100;
+            const maxLeft = ((seekBar.clientWidth - canvas.clientWidth) / seekBar.clientWidth) * 100 - seekbarPadding;
+            canvas.style.left = `max(${seekbarPadding}%, min(${left}%, ${maxLeft}%))`;
+            canvas.style.display = "block";
+        },
+        // ineffective algorithm to find the thumbnail corresponding to the currently hovered position in the video
+        getFrame(position) {
+            let startPosition = 0;
+            const framePage = this.video.previewFrames.at(-1);
+            for (let i = 0; i < framePage.urls.length; i++) {
+                for (let positionY = 0; positionY < framePage.framesPerPageY; positionY++) {
+                    for (let positionX = 0; positionX < framePage.framesPerPageX; positionX++) {
+                        const endPosition = startPosition + framePage.durationPerFrame;
+                        if (position >= startPosition && position <= endPosition) {
+                            return {
+                                url: framePage.urls[i],
+                                positionX: positionX,
+                                positionY: positionY,
+                                frameWidth: framePage.frameWidth,
+                                frameHeight: framePage.frameHeight,
+                            };
+                        }
+                        startPosition = endPosition;
+                    }
+                }
+            }
+            return null;
+        },
+        // creates a new image from an URL
+        loadImage(url) {
+            return new Promise(r => {
+                const i = new Image();
+                i.onload = () => r(i);
+                i.src = url;
+            });
         },
         destroy(hotkeys) {
             if (this.$ui && !document.pictureInPictureElement) {
@@ -788,5 +833,14 @@ export default {
 .skip-segment-button .material-icons-round {
     font-size: 1.6em !important;
     line-height: inherit !important;
+}
+
+#preview {
+    position: absolute;
+    z-index: 2000;
+    bottom: 0;
+    margin-bottom: 4.5%;
+    border-radius: 0.3rem;
+    display: none;
 }
 </style>

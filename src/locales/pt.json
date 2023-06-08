@@ -13,7 +13,8 @@
         "player": "Reprodutor",
         "livestreams": "Transmissões ao vivo",
         "channels": "Canais",
-        "bookmarks": "Marcadores"
+        "bookmarks": "Marcadores",
+        "channel_groups": "Grupos de canais"
     },
     "actions": {
         "sort_by": "Ordenar por:",
@@ -44,14 +45,14 @@
         "export_to_json": "Exportar para JSON",
         "loop_this_video": "Repetir este Vídeo",
         "auto_play_next_video": "Reproduzir Automaticamente o próximo Vídeo",
-        "donations": "Doações de desenvolvimento",
+        "donations": "Doações para o desenvolvimento",
         "minimize_description": "Minimizar Descrição",
         "show_description": "Mostrar Descrição",
         "show_recommendations": "Mostrar Recomendações",
         "disable_lbry": "Desactivar \"LBRY\" para Transmissão",
         "enable_lbry_proxy": "Activar \"Proxy\" para \"LBRY\"",
         "view_ssl_score": "Ver Pontuação \"SSL\"",
-        "search": "Procurar",
+        "search": "Pesquisa (Ctrl+K)",
         "filter": "Filtrar",
         "loading": "A Carregar...",
         "clear_history": "Limpar Histórico",
@@ -106,10 +107,8 @@
         "instance_donations": "Doações de instâncias",
         "minimize_chapters_default": "Minimizar Capítulos por padrão",
         "show_watch_on_youtube": "Mostrar Botão Assistir no YouTube",
-        "new_playlist_name": "Novo nome da lista de reprodução",
         "minimize_comments": "Minimizar Comentários",
         "back_to_home": "Voltar ao início",
-        "rename_playlist": "Renomear",
         "copy_link": "Copiar ligação",
         "time_code": "Código de tempo (em segundos)",
         "minimize_comments_default": "Minimizar Comentários por defeito",
@@ -125,7 +124,17 @@
         "skip_automatically": "Automaticamente",
         "min_segment_length": "Comprimento Mínimo do Segmento (em segundos)",
         "skip_segment": "Saltar Segmento",
-        "show_less": "Mostrar menos"
+        "show_less": "Mostrar menos",
+        "dismiss": "Ignorar",
+        "autoplay_next_countdown": "Predefinição Contagem decrescente até ao próximo vídeo (em segundos)",
+        "create_group": "Criar grupo",
+        "group_name": "Nome do grupo",
+        "auto_display_captions": "Visualização automática de legendas",
+        "playlist_description": "Descrição da lista de reprodução",
+        "okay": "Ok",
+        "cancel": "Cancelar",
+        "edit_playlist": "Editar lista de reprodução",
+        "playlist_name": "Nome da lista de reprodução"
     },
     "preferences": {
         "instance_name": "Nome da Instância",
@@ -181,6 +190,7 @@
         "page_not_found": "Página não encontrada",
         "local_storage": "Esta ação requer localStorage, os cookies estão ativados?",
         "preferences_note": "Nota: as configurações são guardadas no armazenamento local to seu navegador. Eliminar os dados de navegação irá redefini-las.",
-        "register_no_email_note": "Não recomendamos utilizar um endereço de email como nome de utilizador. Continuar?"
+        "register_no_email_note": "Não recomendamos utilizar um endereço de email como nome de utilizador. Continuar?",
+        "next_video_countdown": "A reproduzir o vídeo seguinte em {0}s"
     }
 }

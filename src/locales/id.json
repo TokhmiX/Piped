@@ -13,7 +13,8 @@
         "player": "Pemain",
         "livestreams": "Siaran Langsung",
         "channels": "Saluran",
-        "bookmarks": "Markah"
+        "bookmarks": "Markah",
+        "channel_groups": "Grup saluran"
     },
     "player": {
         "watch_on": "Tonton di {0}"
@@ -50,7 +51,7 @@
         "instances_list": "Daftar Instansi",
         "enabled_codecs": "Kodek yang Diaktifkan (Beberapa)",
         "instance_selection": "Pemilihan Instansi",
-        "show_more": "Tampilkan lebih banyak",
+        "show_more": "Tampilkan Lebih Banyak",
         "yes": "Iya",
         "no": "Tidak",
         "import_from_json": "Impor dari JSON/CSV",
@@ -64,7 +65,7 @@
         "disable_lbry": "Nonaktifkan LBRY untuk Streaming",
         "enable_lbry_proxy": "Aktifkan Proksi untuk LBRY",
         "view_ssl_score": "Tampilkan Skor SSL",
-        "search": "Telusuri",
+        "search": "Telusuri (Ctrl+K)",
         "filter": "Saring",
         "loading": "Memuat...",
         "clear_history": "Hapus Riwayat",
@@ -99,8 +100,6 @@
         "restore_preferences": "Pulihkan preferensi",
         "confirm_reset_preferences": "Apakah Anda yakin ingin mengatur ulang preferensi Anda?",
         "backup_preferences": "Cadangkan preferensi",
-        "rename_playlist": "Ubah nama daftar putar",
-        "new_playlist_name": "Nama daftar putar baru",
         "share": "Bagikan",
         "with_timecode": "Bagikan dengan kode waktu",
         "piped_link": "Tautan Piped",
@@ -128,7 +127,17 @@
         "skip_automatically": "Secara otomatis",
         "min_segment_length": "Panjang Segmen Minimum (dalam detik)",
         "skip_segment": "Lewati Segmen",
-        "show_less": "Tampilkan lebih sedikit"
+        "show_less": "Tampilkan lebih sedikit",
+        "autoplay_next_countdown": "Hitungan mundur bawaan sebelum video berikutnya (dalam detik)",
+        "dismiss": "Abaikan",
+        "create_group": "Buat grup",
+        "group_name": "Nama grup",
+        "auto_display_captions": "Tampilkan Takarir Secara Otomatis",
+        "cancel": "Batal",
+        "playlist_description": "Deskripsi daftar putar",
+        "edit_playlist": "Sunting daftar putar",
+        "playlist_name": "Nama daftar putar",
+        "okay": "Oke"
     },
     "comment": {
         "pinned_by": "Dipasangi pin oleh {author}",
@@ -184,6 +193,7 @@
         "copied": "Disalin!",
         "cannot_copy": "Tidak dapat menyalin!",
         "local_storage": "Tindakan ini membutuhkan localStorage, apakah kuki diaktifkan?",
-        "register_no_email_note": "Menggunakan surel sebagai nama pengguna tidak disarankan. Lanjut?"
+        "register_no_email_note": "Menggunakan surel sebagai nama pengguna tidak disarankan. Lanjut?",
+        "next_video_countdown": "Memutar video berikutnya dalam {0} detik"
     }
 }

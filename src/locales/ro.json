@@ -6,7 +6,7 @@
         "piped_link": "Link Piped",
         "time_code": "Cod de timp (secunde)",
         "show_chapters": "Capitole",
-        "search": "Căutare",
+        "search": "Căutare (Ctrl+K)",
         "logout": "Deconectați-vă de pe acest dispozitiv",
         "add_to_playlist": "Adăugare în playlist",
         "remove_from_playlist": "Ștergere din playlist",
@@ -59,8 +59,6 @@
         "clone_playlist_success": "Clonată cu succes!",
         "reset_preferences": "Resetați preferințele",
         "confirm_reset_preferences": "Sunteți sigur că doriți să vă resetați preferințele?",
-        "rename_playlist": "Redenumiți playlist-ul",
-        "new_playlist_name": "Numele playlist-ului nou",
         "share": "Distribuiți",
         "follow_link": "Urmați link-ul",
         "copy_link": "Copiați link-ul",
@@ -109,7 +107,16 @@
         "skip_button_only": "Afișați butonul de omitere",
         "with_playlist": "Distribuiți cu playlist",
         "playlist_bookmarked": "Marcat",
-        "show_less": "Mai puțin"
+        "show_less": "Mai puțin",
+        "autoplay_next_countdown": "Numărătoarea inversă implicită până la următorul videoclip (în secunde)",
+        "dismiss": "Concediază",
+        "group_name": "Numele grupului",
+        "create_group": "Creați un grup",
+        "auto_display_captions": "Afișează automat subtitrările",
+        "playlist_name": "Numele playlist-ului",
+        "okay": "Bine",
+        "playlist_description": "Descrierea playlist-ului",
+        "edit_playlist": "Editează playlist-ul"
     },
     "preferences": {
         "ssl_score": "Scor SSL",
@@ -159,7 +166,8 @@
         "page_not_found": "Pagina nu a fost găsită",
         "copied": "Copiat!",
         "register_no_email_note": "Utilizarea unui e-mail ca nume de utilizator nu este recomandată. Continuați oricum?",
-        "local_storage": "Această acțiune necesită localStorage, sunt activate cookie-urile?"
+        "local_storage": "Această acțiune necesită localStorage, sunt activate cookie-urile?",
+        "next_video_countdown": "Redarea următorului videoclip în {0}s"
     },
     "subscriptions": {
         "subscribed_channels_count": "Abonat la: {0}"
@@ -177,8 +185,9 @@
         "livestreams": "Fluxuri live",
         "channels": "Canale",
         "preferences": "Preferințe",
-        "player": "Player",
-        "bookmarks": "Marcaje"
+        "player": "Player-ul",
+        "bookmarks": "Marcaje",
+        "channel_groups": "Grupuri de canale"
     },
     "player": {
         "watch_on": "Vizionați pe {0}"

@@ -13,7 +13,8 @@
         "register": "S’inscriure",
         "subscriptions": "Abonaments",
         "playlists": "Listas de lecturas",
-        "bookmarks": "Marcapaginas"
+        "bookmarks": "Marcapaginas",
+        "channel_groups": "Grops de cadenas"
     },
     "player": {
         "watch_on": "Agachar sus {0}"
@@ -41,7 +42,7 @@
         "minimize_recommendations": "Minimizar las recomandacions",
         "enable_lbry_proxy": "Activar lo servidor mandatari per LBRY",
         "view_ssl_score": "Mostrar l’avaloracion SSL",
-        "search": "Recercar",
+        "search": "Recercar (Ctrl+K)",
         "filter": "Filtrar",
         "disable_lbry": "Desactivar LBRY per la difusion en dirècte",
         "loading": "Cargament…",
@@ -97,8 +98,6 @@
         "invalidate_session": "Se desconnectar de totes los aparelhs",
         "different_auth_instance": "Utilizar una instància diferenta per l’autentificacion",
         "back_to_home": "Tornar a l’acuèlh",
-        "rename_playlist": "Renomenar la lista de lectura",
-        "new_playlist_name": "Nom novèl de la lista de lectura",
         "with_timecode": "Partejar amb còdi orari",
         "piped_link": "Ligam cap a Piped",
         "show_chapters": "Capítols",
@@ -128,7 +127,11 @@
         "skip_automatically": "Automaticament",
         "min_segment_length": "Durada minimum de segment (en segondas)",
         "skip_segment": "Sautar lo segment",
-        "show_less": "Ne mostrar mens"
+        "show_less": "Ne mostrar mens",
+        "autoplay_next_countdown": "Descompte per defaut abans de passar a la vidèo seguenta (en segondas)",
+        "dismiss": "Ignorar",
+        "create_group": "Crear un grop",
+        "group_name": "Nom del grop"
     },
     "preferences": {
         "instance_locations": "Localizacion de l’instància",
@@ -161,7 +164,8 @@
         "page_not_found": "Pagina pas trobada",
         "cannot_copy": "Còpia impossibla !",
         "local_storage": "Aquesta accion requerís lo localStorage, son activats los cookies ?",
-        "register_no_email_note": "Es pas recomandat d’utilizar una adreça electronica coma nom d’utilizaire. Contunhar çaquelà ?"
+        "register_no_email_note": "Es pas recomandat d’utilizar una adreça electronica coma nom d’utilizaire. Contunhar çaquelà ?",
+        "next_video_countdown": "La vidèo seguenta començarà d’aquí {0}s"
     },
     "comment": {
         "disabled": "L’autor a desactivat los comentaris.",

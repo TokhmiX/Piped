@@ -55,7 +55,7 @@ export default {
         });
 
         if ("indexedDB" in window) {
-            const request = indexedDB.open("piped-db", 3);
+            const request = indexedDB.open("piped-db", 4);
             request.onupgradeneeded = ev => {
                 const db = request.result;
                 console.log("Upgrading object store.");
@@ -72,6 +72,10 @@ export default {
                     const store = db.createObjectStore("playlist_bookmarks", { keyPath: "playlistId" });
                     store.createIndex("playlist_id_idx", "playlistId", { unique: true });
                     store.createIndex("id_idx", "id", { unique: true, autoIncrement: true });
+                }
+                if (!db.objectStoreNames.contains("channel_groups")) {
+                    const store = db.createObjectStore("channel_groups", { keyPath: "groupName" });
+                    store.createIndex("groupName", "groupName", { unique: true });
                 }
             };
             request.onsuccess = e => {
@@ -112,6 +116,10 @@ a,
 b {
     unicode-bidi: plaintext;
     text-align: start;
+}
+
+:root {
+    color-scheme: only light;
 }
 
 ::-webkit-scrollbar {
@@ -208,8 +216,10 @@ b {
 }
 
 .input:focus {
-    @apply border-2 border-red-500 outline-none;
-    box-shadow: 0 0 15px rgba(239, 68, 68, var(--un-border-opacity));
+    @apply outline-red-500;
+    outline-style: solid;
+    outline-width: 2px;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 1);
 }
 
 hr {

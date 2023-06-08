@@ -4,8 +4,6 @@
             ref="videoPlayer"
             :video="video"
             :sponsors="sponsors"
-            :playlist="playlist"
-            :index="index"
             :selected-auto-play="false"
             :selected-auto-loop="selectedAutoLoop"
             :is-embed="isEmbed"
@@ -14,6 +12,11 @@
 
     <LoadingIndicatorPage :show-content="video && !isEmbed" class="w-full">
         <ErrorHandler v-if="video && video.error" :message="video.message" :error="video.error" />
+        <Transition>
+            <ToastComponent v-if="shouldShowToast" @dismissed="dismiss">
+                <i18n-t keypath="info.next_video_countdown">{{ counter }}</i18n-t>
+            </ToastComponent>
+        </Transition>
 
         <div v-show="!video.error">
             <div :class="isMobile ? 'flex-col' : 'flex'">
@@ -22,11 +25,10 @@
                         ref="videoPlayer"
                         :video="video"
                         :sponsors="sponsors"
-                        :playlist="playlist"
-                        :index="index"
                         :selected-auto-play="selectedAutoPlay"
                         :selected-auto-loop="selectedAutoLoop"
                         @timeupdate="onTimeUpdate"
+                        @ended="onVideoEnded"
                     />
                 </keep-alive>
                 <ChaptersBar
@@ -41,20 +43,20 @@
             <div class="font-bold mt-2 text-2xl break-words" v-text="video.title" />
             <div class="flex flex-wrap mt-3 mb-3">
                 <!-- views / date -->
-                <div class="flex flex-auto children:ml-2">
+                <div class="flex flex-auto gap-2">
                     <span v-t="{ path: 'video.views', args: { views: addCommas(video.views) } }" />
                     <span> | </span>
                     <span v-text="uploadDate" />
                 </div>
                 <!-- Likes/dilikes -->
-                <div class="flex children:mr-2">
+                <div class="flex gap-2">
                     <template v-if="video.likes >= 0">
                         <div class="flex items-center">
-                            <div class="i-fa-solid:thumbs-up" />
+                            <div class="i-fa6-solid:thumbs-up" />
                             <strong class="ml-1" v-text="addCommas(video.likes)" />
                         </div>
                         <div class="flex items-center">
-                            <div class="i-fa-solid:thumbs-down" />
+                            <div class="i-fa6-solid:thumbs-down" />
                             <strong class="ml-1" v-text="video.dislikes >= 0 ? addCommas(video.dislikes) : '?'" />
                         </div>
                     </template>
@@ -66,7 +68,7 @@
                 </div>
             </div>
             <!-- Channel info & options flex container -->
-            <div class="flex">
+            <div class="flex flex-wrap gap-1">
                 <!-- Channel Image & Info -->
                 <div class="flex items-center">
                     <img :src="video.uploaderAvatar" alt="" loading="lazy" class="rounded-full" />
@@ -75,19 +77,6 @@
                     }}</router-link>
                     <!-- Verified Badge -->
                     <font-awesome-icon class="ml-1" v-if="video.uploaderVerified" icon="check" />
-                </div>
-                <div class="flex relative ml-auto children:mr-1 items-center">
-                    <button class="btn" v-if="authenticated" @click="showModal = !showModal">
-                        {{ $t("actions.add_to_playlist") }}<font-awesome-icon class="ml-1" icon="circle-plus" />
-                    </button>
-                    <button
-                        class="btn"
-                        @click="subscribeHandler"
-                        v-t="{
-                            path: `actions.${subscribed ? 'unsubscribe' : 'subscribe'}`,
-                            args: { count: numberFormat(video.uploaderSubscriberCount) },
-                        }"
-                    />
                 </div>
                 <PlaylistAddModal v-if="showModal" :video-id="getVideoId()" @close="showModal = !showModal" />
                 <ShareModal
@@ -98,8 +87,20 @@
                     :playlist-index="index"
                     @close="showShareModal = !showShareModal"
                 />
-                <div class="flex">
-                    <div class="self-center children:mr-1 my-1">
+                <div class="flex flex-wrap gap-1 ml-auto">
+                    <!-- Subscribe Button -->
+                    <button class="btn flex items-center" v-if="authenticated" @click="showModal = !showModal">
+                        {{ $t("actions.add_to_playlist") }}<font-awesome-icon class="ml-1" icon="circle-plus" />
+                    </button>
+                    <button
+                        class="btn"
+                        @click="subscribeHandler"
+                        v-t="{
+                            path: `actions.${subscribed ? 'unsubscribe' : 'subscribe'}`,
+                            args: { count: numberFormat(video.uploaderSubscriberCount) },
+                        }"
+                    />
+                    <div class="flex flex-wrap gap-1">
                         <!-- RSS Feed button -->
                         <a
                             aria-label="RSS feed"
@@ -108,18 +109,22 @@
                             v-if="video.uploaderUrl"
                             :href="`${apiUrl()}/feed/unauthenticated/rss?channels=${video.uploaderUrl.split('/')[2]}`"
                             target="_blank"
-                            class="btn flex-col"
+                            class="btn flex items-center"
                         >
-                            <font-awesome-icon icon="rss" />
+                            <font-awesome-icon class="mx-1.5" icon="rss" />
                         </a>
                         <WatchOnYouTubeButton :link="`https://youtu.be/${getVideoId()}`" />
                         <!-- Share Dialog -->
-                        <button class="btn" @click="showShareModal = !showShareModal">
+                        <button class="btn flex items-center" @click="showShareModal = !showShareModal">
                             <i18n-t class="lt-lg:hidden" keypath="actions.share" tag="strong"></i18n-t>
                             <font-awesome-icon class="mx-1.5" icon="fa-share" />
                         </button>
                         <!-- LBRY -->
-                        <a v-if="video.lbryId" :href="'https://odysee.com/' + video.lbryId" class="btn">
+                        <a
+                            v-if="video.lbryId"
+                            :href="'https://odysee.com/' + video.lbryId"
+                            class="btn flex items-center"
+                        >
                             <i18n-t keypath="player.watch_on" tag="strong">LBRY</i18n-t>
                         </a>
                         <!-- listen / watch toggle -->
@@ -127,9 +132,9 @@
                             :to="toggleListenUrl"
                             :aria-label="(isListening ? 'Watch ' : 'Listen to ') + video.title"
                             :title="(isListening ? 'Watch ' : 'Listen to ') + video.title"
-                            class="btn flex-col"
+                            class="btn flex items-center"
                         >
-                            <font-awesome-icon :icon="isListening ? 'tv' : 'headphones'" />
+                            <font-awesome-icon class="mx-1.5" :icon="isListening ? 'tv' : 'headphones'" />
                         </router-link>
                     </div>
                 </div>
@@ -233,6 +238,8 @@ import ShareModal from "./ShareModal.vue";
 import PlaylistVideos from "./PlaylistVideos.vue";
 import WatchOnYouTubeButton from "./WatchOnYouTubeButton.vue";
 import LoadingIndicatorPage from "./LoadingIndicatorPage.vue";
+import ToastComponent from "./ToastComponent.vue";
+import { parseTimeParam } from "@/utils/Misc";
 
 export default {
     name: "App",
@@ -247,6 +254,7 @@ export default {
         PlaylistVideos,
         WatchOnYouTubeButton,
         LoadingIndicatorPage,
+        ToastComponent,
     },
     data() {
         const smallViewQuery = window.matchMedia("(max-width: 640px)");
@@ -272,6 +280,9 @@ export default {
             showShareModal: false,
             isMobile: true,
             currentTime: 0,
+            shouldShowToast: false,
+            timeoutCounter: null,
+            counter: 0,
         };
     },
     computed: {
@@ -292,6 +303,9 @@ export default {
                 day: "numeric",
                 year: "numeric",
             });
+        },
+        defaultCounter(_this) {
+            return _this.getPreferenceNumber("autoPlayNextCountdown", 5);
         },
     },
     mounted() {
@@ -362,10 +376,12 @@ export default {
     deactivated() {
         this.active = false;
         window.removeEventListener("scroll", this.handleScroll);
+        this.dismiss();
     },
     unmounted() {
         window.removeEventListener("scroll", this.handleScroll);
         window.removeEventListener("click", this.handleClick);
+        this.dismiss();
     },
     methods: {
         fetchVideo() {
@@ -528,16 +544,32 @@ export default {
         },
         handleClick(event) {
             if (!event || !event.target) return;
-            var target = event.target;
-            if (
-                !target.nodeName == "A" ||
-                !target.getAttribute("href") ||
-                !target.innerText.match(/(?:[\d]{1,2}:)?(?:[\d]{1,2}):(?:[\d]{1,2})/)
-            )
-                return;
-            const time = parseInt(target.getAttribute("href").match(/(?<=t=)\d+/)[0]);
-            this.navigate(time);
-            event.preventDefault();
+            if (!event.target.matches("a[href]")) return;
+            const target = event.target;
+            if (!target.getAttribute("href")) return;
+            if (this.handleTimestampLinks(target)) {
+                event.preventDefault();
+            }
+        },
+        handleTimestampLinks(target) {
+            try {
+                const url = new URL(target.getAttribute("href"), document.baseURI);
+                if (
+                    url.searchParams.size > 2 ||
+                    url.searchParams.get("v") !== this.getVideoId() ||
+                    !url.searchParams.has("t")
+                ) {
+                    return false;
+                }
+                const time = parseTimeParam(url.searchParams.get("t"));
+                if (time) {
+                    this.navigate(time);
+                }
+                return true;
+            } catch (e) {
+                console.error(e);
+            }
+            return false;
         },
         handleScroll() {
             if (this.loading || !this.comments || !this.comments.nextpage) return;
@@ -562,6 +594,68 @@ export default {
         onTimeUpdate(time) {
             this.currentTime = time;
         },
+        onVideoEnded() {
+            if (
+                !this.selectedAutoLoop &&
+                this.selectedAutoPlay &&
+                (this.playlist?.relatedStreams?.length > 0 || this.video.relatedStreams.length > 0)
+            ) {
+                this.showToast();
+            }
+        },
+        showToast() {
+            this.counter = this.defaultCounter;
+            if (this.counter < 1) {
+                this.navigateNext();
+                return;
+            }
+            if (this.timeoutCounter) clearInterval(this.timeoutCounter);
+            this.timeoutCounter = setInterval(() => {
+                this.counter--;
+                if (this.counter === 0) {
+                    this.dismiss();
+                    this.navigateNext();
+                }
+            }, 1000);
+            this.shouldShowToast = true;
+        },
+        dismiss() {
+            clearInterval(this.timeoutCounter);
+            this.shouldShowToast = false;
+        },
+        navigateNext() {
+            const params = this.$route.query;
+            let url = this.playlist?.relatedStreams?.[this.index]?.url ?? this.video.relatedStreams[0].url;
+            const searchParams = new URLSearchParams();
+            for (var param in params)
+                switch (param) {
+                    case "v":
+                    case "t":
+                        break;
+                    case "index":
+                        if (this.index < this.playlist.relatedStreams.length) searchParams.set("index", this.index + 1);
+                        break;
+                    case "list":
+                        if (this.index < this.playlist.relatedStreams.length) searchParams.set("list", params.list);
+                        break;
+                    default:
+                        searchParams.set(param, params[param]);
+                        break;
+                }
+            // save the fullscreen state
+            searchParams.set("fullscreen", this.$refs.videoPlayer.$ui.getControls().isFullScreenEnabled());
+            const paramStr = searchParams.toString();
+            if (paramStr.length > 0) url += "&" + paramStr;
+            this.$router.push(url);
+        },
     },
 };
 </script>
+
+<style>
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+    transform: translateX(100%) scale(0.5);
+}
+</style>

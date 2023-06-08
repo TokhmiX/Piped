@@ -36,7 +36,7 @@
         "enabled_codecs": "Codecs Ativados (Múltiplos)",
         "language_selection": "Seleção de Idioma",
         "yes": "Sim",
-        "show_more": "Mostrar mais",
+        "show_more": "Mostrar Mais",
         "export_to_json": "Exportar para JSON",
         "donations": "Doações de desenvolvimento",
         "minimize_recommendations": "Minimizar Recomendações",
@@ -59,7 +59,7 @@
         "loop_this_video": "Repetir este Vídeo",
         "instances_list": "Lista de Instâncias",
         "clear_history": "Limpar Histórico",
-        "search": "Pesquisar",
+        "search": "Pesquisar (Ctrl+K)",
         "no": "Não",
         "show_description": "Exibir Descrição",
         "instance_selection": "Seleção de Instância",
@@ -87,8 +87,6 @@
         "restore_preferences": "Restaurar preferências",
         "back_to_home": "Voltar ao início",
         "share": "Compartilhar",
-        "rename_playlist": "Renomear playlist",
-        "new_playlist_name": "Novo nome da playlist",
         "with_timecode": "Compartilhar com código de tempo",
         "piped_link": "Link do Piped",
         "follow_link": "Seguir link",
@@ -109,7 +107,17 @@
         "skip_segment": "Ignorar Segmento",
         "min_segment_length": "Comprimento Mínimo do Segmento (em segundos)",
         "skip_button_only": "Mostrar botão pular",
-        "show_less": "Mostrar menos"
+        "show_less": "Mostrar menos",
+        "autoplay_next_countdown": "Contagem regressiva padrão até o próximo vídeo (em segundos)",
+        "dismiss": "Liberar",
+        "cancel": "Cancelar",
+        "edit_playlist": "Editar playlist",
+        "playlist_description": "Descrição da playlist",
+        "okay": "Ok",
+        "playlist_name": "Nome da playlist",
+        "auto_display_captions": "Exibição Automática de Legendas",
+        "create_group": "Criar grupo",
+        "group_name": "Nome do grupo"
     },
     "titles": {
         "history": "Histórico",
@@ -125,7 +133,8 @@
         "account": "Conta",
         "channels": "Canais",
         "livestreams": "Transmissões ao vivo",
-        "bookmarks": "Favoritos"
+        "bookmarks": "Favoritos",
+        "channel_groups": "Grupos de Canais"
     },
     "player": {
         "watch_on": "Assistir no {0}"
@@ -178,7 +187,8 @@
         "preferences_note": "Nota: as preferências são salvas no armazenamento local do seu navegador. A exclusão dos dados do seu navegador irá redefini-los.",
         "page_not_found": "página não encontrada",
         "local_storage": "Esta ação requer localStorage, os cookies estão ativados?",
-        "register_no_email_note": "Usar um e-mail como nome de usuário não é recomendado. Continuar mesmo assim?"
+        "register_no_email_note": "Usar um e-mail como nome de usuário não é recomendado. Continuar mesmo assim?",
+        "next_video_countdown": "Reproduzindo o próximo vídeo em {0}s"
     },
     "subscriptions": {
         "subscribed_channels_count": "Inscrito em: {0}"

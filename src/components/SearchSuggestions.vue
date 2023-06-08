@@ -51,11 +51,12 @@ export default {
                 if (this.getPreferenceBoolean("searchHistory", false))
                     this.searchSuggestions = JSON.parse(localStorage.getItem("search_history")) ?? [];
             } else {
-                this.searchSuggestions = (
-                    await this.fetchJson(this.apiUrl() + "/opensearch/suggestions", {
-                        query: this.searchText,
-                    })
-                )?.[1];
+                this.searchSuggestions =
+                    (
+                        await this.fetchJson(this.apiUrl() + "/opensearch/suggestions", {
+                            query: this.searchText,
+                        })
+                    )?.[1] ?? [];
             }
             this.searchSuggestions.unshift(this.searchText);
             this.setSelected(0);
@@ -82,7 +83,7 @@ export default {
 
 <style>
 .suggestions-container {
-    @apply left-1/2 translate-x-[-50%] transform-gpu max-w-3xl w-full box-border p-y-1.25 z-10 lt-md:max-w-[calc(100%-0.5rem)] bg-gray-300;
+    @apply left-1/2 translate-x-[-50%] transform-gpu max-w-3xl w-full box-border z-10 lt-md:max-w-[calc(100%-0.5rem)] bg-gray-300;
 }
 
 .dark .suggestions-container {
@@ -98,6 +99,6 @@ export default {
 }
 
 .suggestion {
-    @apply p-y-1;
+    @apply p-1;
 }
 </style>

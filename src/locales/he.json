@@ -13,7 +13,8 @@
         "instance": "עותק",
         "livestreams": "שידורים חיים",
         "channels": "ערוצים",
-        "bookmarks": "סימניות"
+        "bookmarks": "סימניות",
+        "channel_groups": "קבוצות ערוץ"
     },
     "player": {
         "watch_on": "לצפות ב־{0}"
@@ -100,11 +101,9 @@
         "disable_lbry": "השבתת הזרמה עם LBRY",
         "enable_lbry_proxy": "הפעלת מתווך ל־LBRY",
         "view_ssl_score": "הצגת דירוג SSL",
-        "search": "חיפוש",
+        "search": "חיפוש (Ctrl+K)",
         "loop_this_video": "ניגון הסרטון בלולאה",
         "minimize_recommendations": "מזעור המלצות",
-        "rename_playlist": "שינוי שם רשימת נגינה",
-        "new_playlist_name": "שם לרשימת נגינה חדשה",
         "show_chapters": "פרקים",
         "skip_intro": "דילוג על הפוגה/הנפשת הקדמה",
         "skip_outro": "דילוג על כרטיסי סיום/קרדיטים",
@@ -128,7 +127,17 @@
         "min_segment_length": "אורך מקטע מזערי (בשניות)",
         "skip_segment": "דילוג על מקטע",
         "skip_automatically": "אוטומטית",
-        "show_less": "להציג פחות"
+        "show_less": "להציג פחות",
+        "autoplay_next_countdown": "ספירה לאחור כברירת מחדל עד לסרטון הבא (בשניות)",
+        "dismiss": "התעלמות",
+        "create_group": "יצירת קבוצה",
+        "group_name": "שם הקבוצה",
+        "auto_display_captions": "הצגת כתוביות אוטומטית",
+        "cancel": "ביטול",
+        "edit_playlist": "עריכת רשימת נגינה",
+        "playlist_name": "שם רשימת הנגינה",
+        "playlist_description": "תיאור רשימת הנגינה",
+        "okay": "אישור"
     },
     "comment": {
         "pinned_by": "ננעץ על ידי {author}",
@@ -178,7 +187,8 @@
         "copied": "הועתק!",
         "cannot_copy": "לא ניתן להעתיק!",
         "local_storage": "פעולה זו דורשת אחסון מקומי (localStorage), האם עוגיות פעילות?",
-        "register_no_email_note": "לא מומלץ להשתמש בכתובת דוא״ל כשם משתמש. להמשיך בכל זאת?"
+        "register_no_email_note": "לא מומלץ להשתמש בכתובת דוא״ל כשם משתמש. להמשיך בכל זאת?",
+        "next_video_countdown": "הסרטון הבא יתנגן בעוד {0} שניות"
     },
     "subscriptions": {
         "subscribed_channels_count": "נרשמת אל: {0}"

@@ -51,7 +51,7 @@
         "instance_selection": "Selezione dell'istanza",
         "loading": "Caricamento…",
         "filter": "Filtra",
-        "search": "Cerca",
+        "search": "Cerca (Ctrl+K)",
         "view_ssl_score": "Visualizza il punteggio SSL",
         "clear_history": "Cancella la cronologia",
         "load_more_replies": "Carica più risposte",
@@ -87,8 +87,6 @@
         "time_code": "Tempo (in secondi)",
         "follow_link": "Apri il collegamento",
         "with_timecode": "Condividi con marca temporale",
-        "new_playlist_name": "Nuovo nome dalla playlist",
-        "rename_playlist": "Rinomina la playlist",
         "show_chapters": "Capitoli",
         "store_search_history": "Memorizza la cronologia delle ricerche",
         "status_page": "Stato",
@@ -109,7 +107,8 @@
         "skip_automatically": "Automaticamente",
         "skip_button_only": "Mostra pulsante di salto",
         "skip_segment": "Salta segmento",
-        "show_less": "Mostra meno"
+        "show_less": "Mostra meno",
+        "autoplay_next_countdown": "Conto alla rovescia predefinito prima del video successivo (in secondi)"
     },
     "player": {
         "watch_on": "Guarda su {0}"
@@ -184,6 +183,7 @@
         "copied": "Copiato!",
         "cannot_copy": "Impossibile copiare!",
         "local_storage": "Questa azione richiede localStorage, i cookie sono abilitati?",
-        "register_no_email_note": "L'utilizzo di un indirizzo e-mail come nome utente è sconsigliato. Continuare comunque?"
+        "register_no_email_note": "L'utilizzo di un indirizzo e-mail come nome utente è sconsigliato. Continuare comunque?",
+        "next_video_countdown": "Riproduzione prossimo video tra {0}s"
     }
 }

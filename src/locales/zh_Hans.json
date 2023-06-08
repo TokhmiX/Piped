@@ -49,7 +49,7 @@
         "subscribe": "订阅 - {count}",
         "loading": "正在加载...",
         "filter": "筛选",
-        "search": "搜索",
+        "search": "搜索 (Ctrl+K)",
         "view_ssl_score": "查看 SSL 得分",
         "minimize_recommendations": "最小化建议",
         "show_recommendations": "显示推荐",
@@ -87,8 +87,6 @@
         "share": "分享",
         "with_timecode": "用时间码分享",
         "time_code": "时间码（单位：秒）",
-        "rename_playlist": "重命名播放列表",
-        "new_playlist_name": "新播放列表名",
         "show_chapters": "章节",
         "store_search_history": "保存搜索历史",
         "hide_watched": "在源中隐藏看过的视频",
@@ -109,7 +107,17 @@
         "min_segment_length": "最小分段长度（以秒为单位）",
         "skip_segment": "跳过分段",
         "skip_button_only": "显示跳过按钮",
-        "show_less": "显示更少"
+        "show_less": "显示更少",
+        "autoplay_next_countdown": "下一个视频开始前的默认倒计时长（以秒计）",
+        "dismiss": "解除",
+        "group_name": "组名称",
+        "create_group": "创建组",
+        "auto_display_captions": "自动显示字幕",
+        "playlist_name": "播放列表名称",
+        "playlist_description": "播放列表描述",
+        "cancel": "取消",
+        "okay": "好的",
+        "edit_playlist": "编辑播放列表"
     },
     "video": {
         "sponsor_segments": "赞助商部分",
@@ -155,7 +163,8 @@
         "player": "播放器",
         "livestreams": "直播",
         "channels": "频道",
-        "bookmarks": "书签"
+        "bookmarks": "书签",
+        "channel_groups": "频道组"
     },
     "login": {
         "password": "密码",
@@ -184,6 +193,7 @@
         "copied": "已复制！",
         "cannot_copy": "无法复制！",
         "local_storage": "此操作需要本地存储，是否启用了Cookie？",
-        "register_no_email_note": "不建议使用电子邮件作为用户名。仍要继续吗？"
+        "register_no_email_note": "不建议使用电子邮件作为用户名。仍要继续吗？",
+        "next_video_countdown": "在{0}秒后播放下一个视频"
     }
 }
